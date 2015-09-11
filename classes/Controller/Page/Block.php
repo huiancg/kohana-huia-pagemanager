@@ -58,4 +58,14 @@ class Controller_Page_Block extends Controller_App {
 		$this->response->body(Model_Page_Block::draft($page_id, $page_block_template_id));
 	}
 
+	public function action_save()
+	{
+		$page_id = $this->request->post('page_id');
+		$blocks = $this->request->post('blocks');
+
+		$result = Model_Page::data_save($page_id, $blocks);
+
+		$this->response->json($result);
+	}
+
 }
