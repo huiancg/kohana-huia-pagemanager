@@ -18,4 +18,18 @@ class Controller_Page extends Controller_App {
 		$this->description = $this->page->meta_description;
 	}
 
+	public function action_save()
+	{
+		if ( ! Auth::instance()->logged_in('admin'))
+		{
+			exit();
+		}
+
+		$page_id = $this->request->post('page_id');
+		$blocks = $this->request->post('blocks');
+
+		$result = Model_Page::draft($page_id, $blocks);
+		$this->response->json($result);
+	}
+
 }

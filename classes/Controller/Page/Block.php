@@ -11,11 +11,15 @@ class Controller_Page_Block extends Controller_App {
 		parent::before();
 	}
 
-	public function action_new()
+	public function action_save()
 	{
-		$page_id = $this->request->post('page_id');
-		$page_block_template_id = $this->request->post('page_block_template_id');
-		$this->response->body(Model_Page_Block::draft($page_id, $page_block_template_id));
+		$page_id = $this->request->query('page_id');
+		$page_block_template_id = $this->request->query('page_block_template_id');
+		$order = $this->request->query('order');
+		$block = $this->request->post();
+
+		$result = Model_Page_Block::draft($page_id, $page_block_template_id, $order, @json_encode($block));
+		$this->response->body($result);
 	}
 
 	public function action_upload()
@@ -30,17 +34,6 @@ class Controller_Page_Block extends Controller_App {
 			$options['param_name'] = key($_FILES);
 		}
 		$handler = new UploadHandler($options);
-	}
-
-	public function action_save()
-	{
-		$page_id = $this->request->query('page_id');
-		$block = $this->request->post();
-
-		// TODO persistir bloco
-		// $result = Model_Page::data_save($page_id, $blocks);
-
-		$this->response->json($block);
 	}
 
 }
