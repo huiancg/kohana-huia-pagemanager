@@ -1,0 +1,9 @@
+<?php if (Auth::instance()->logged_in('admin')) : ?>
+<div class="_block" data-page-block-template-id="<?php echo $_block->page_block_template_id; ?>">
+  <div class="_block_toolbar">
+    <a href="" class="_block_toolbar_button _block_toolbar_up"></a>
+    <a href="" class="_block_toolbar_button _block_toolbar_down"></a>
+    <a href="" class="_block_toolbar_button _block_toolbar_edit">Editar</a>
+    <a href="" class="_block_toolbar_button _block_toolbar_delete">Excluir</a>
+  </div>
+<?php endif; ?>

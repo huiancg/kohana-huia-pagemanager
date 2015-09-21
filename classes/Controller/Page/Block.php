@@ -18,7 +18,7 @@ class Controller_Page_Block extends Controller_App {
 		$order = $this->request->query('order');
 		$block = $this->request->post();
 
-		$result = Model_Page_Block::draft($page_id, $page_block_template_id, $order, @json_encode($block));
+		$result = Model_Page_Block::draft($page_id, $page_block_template_id, $order, (array) @json_encode($block));
 		$this->response->body($result);
 	}
 

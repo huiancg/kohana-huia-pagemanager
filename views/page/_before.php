@@ -1,0 +1,24 @@
+<?php if (Auth::instance()->logged_in('admin')) : ?>
+<style>
+  ._block_toolbar {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 9999;
+  }
+  ._block:hover ._block_toolbar {
+    display: block;
+  }
+  .btn-add,
+  .btn-remove {
+    margin-bottom: 10px;
+  }
+  .data_group,
+  .data_group > fieldset {
+    border: 1px solid #000;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+</style>
+<?php endif; ?>
