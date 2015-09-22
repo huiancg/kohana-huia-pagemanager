@@ -26,8 +26,8 @@ class Controller_Page_Block extends Controller_App {
 	{
 		$options = array(
 			'script_url' => URL::site('page_block/upload') . '/',
-      'upload_dir' => SYSPATH . 'public/upload/',
-      'upload_url' => URL::site('public/upload') . '/'
+			'upload_dir' => DOCROOT . 'public/upload/',
+			'upload_url' => URL::site('public/upload') . '/'
 		);
 		if ($_FILES AND ! isset($_FILES['files']))
 		{
