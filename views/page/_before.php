@@ -1,4 +1,4 @@
-<?php if (Auth::instance()->logged_in('admin')) : ?>
+<?php if ($preview) : ?>
 <style>
   ._block_toolbar {
     display: none;

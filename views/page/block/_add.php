@@ -1,3 +1,4 @@
+<?php if ($preview) : ?>
 <div class="full-width" id="_block_add" about="null">
 	<a href="#">[+] Adicionar bloco</a>
 </div>
@@ -27,3 +28,4 @@
 	margin: 10px 0;
 }
 </style>
+<?php endif; ?>

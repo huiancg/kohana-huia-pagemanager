@@ -50,6 +50,16 @@ class Model_Page extends Model_Base_Page {
 		return $result;
 	}
 
+	public function link_preview()
+	{
+		if ( ! $this->loaded())
+		{
+			return '';
+		}
+
+		return URL::site('page/preview/' . $this->id);
+	}
+
 	public function link()
 	{
 		if ( ! $this->loaded())

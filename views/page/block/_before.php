@@ -1,4 +1,4 @@
-<?php if (Auth::instance()->logged_in('admin')) : ?>
+<?php if ($preview) : ?>
 <div class="_block" data-page-block-template-id="<?php echo $_block->page_block_template_id; ?>">
   <div class="_block_toolbar">
     <a href="" class="_block_toolbar_button _block_toolbar_up"></a>
