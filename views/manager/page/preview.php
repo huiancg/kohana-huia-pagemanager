@@ -7,6 +7,7 @@
 
 <nav id="buttons-navbar" class="navbar navbar-default navbar-fixed" data-spy="affix">
   <div class="container-fluid">
+
     <div class="btn-group" role="group">
 		  <div class="btn-group">
 		    <button type="button" class="btn btn-success" id="nav-btn-save">
@@ -22,6 +23,15 @@
 		  </div>
 		  -->
 		</div>
+
+		<div class="btn-group" role="group">
+		  <div class="btn-group">
+		    <button type="button" class="btn btn-default" id="nav-btn-add-block">
+		    	<span class="glyphicon glyphicon-plus"></span> Bloco
+		    </button>
+		  </div>
+		</div>
+		
   </div>
 </nav>
 
@@ -64,4 +74,10 @@
 			}
 		});
 	});
+	
+	$('#nav-btn-add-block').click(function(e) {
+		e.preventDefault();
+		iframe_contents._block_add_form.dialog('open');
+	});
+
 </script>
