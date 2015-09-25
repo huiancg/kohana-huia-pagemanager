@@ -1,4 +1,10 @@
 
+<ol class="breadcrumb">
+	<li><a href="<?php echo URL::site('manager'); ?>">Manager</a></li>
+	<li><a href="<?php echo URL::site('manager/page'); ?>">Páginas</a></li>
+	<li><?php echo $page->name; ?></li>
+</ol>
+
 <nav id="buttons-navbar" class="navbar navbar-default navbar-fixed" data-spy="affix">
   <div class="container-fluid">
     <div class="btn-group" role="group">
