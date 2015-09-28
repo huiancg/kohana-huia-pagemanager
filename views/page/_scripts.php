@@ -209,6 +209,9 @@ var modal_render = function(block)
 	block.append(wando_modal);
 	
 	wando_modal.dialog({
+		height: 'auto',
+		width: 'auto',
+		resize: 'auto',
 		maxHeight: 500,
 		modal: true,
 		position: {
@@ -330,7 +333,7 @@ var bind_toolbar = function(block)
 	block_index_refresh();
 
 	if (block) {
-		app.block.start(block);
+		app.block.start($('.block:first', block));
 		bind_block(block);
 	} else {
 		$('._block').each(function() {
