@@ -1,5 +1,16 @@
 <script>
 
+var edited = false;
+var set_edited = function(status) {
+	edited = (status !== undefined) ? status : true;
+};
+
+$(window).bind('beforeunload', function(e) {
+	if (edited) {
+		return 'As alterações serão perdidadas caso saia da página.';
+	}
+});
+
 var page_id = $('section.section:first').data('page-id');
 
 var _block_add_form = $('#_block_add_form').dialog({
@@ -23,6 +34,7 @@ var _block_add_form = $('#_block_add_form').dialog({
 				$('#_block_add').before(r);
 				bind_toolbar(r);
 				_block_add_form.dialog('close');
+				set_edited();
 			});
 		},
 		'Cancelar': function() {
@@ -42,7 +54,9 @@ var save_page = function() {
 		blocks: blocks
 	};
 	var url = base_url + 'page/save';
-	return $.post(url, data);
+	return $.post(url, data).success(function() {
+		set_edited(false);
+	});
 }
 
 var save_block = function(form, block) {
@@ -231,6 +245,7 @@ var modal_render = function(block)
 					body = $(body);
 					block.replaceWith(body);
 					bind_toolbar(body);
+					set_edited();
 					wando_modal.dialog('close');
 				});
 			},
@@ -362,6 +377,7 @@ var bind_toolbar = function(block)
 
 			blocks[index] = prev_data;
 			blocks[index - 1] = current_data;
+			set_edited();
 		}
 	});
 
@@ -384,6 +400,7 @@ var bind_toolbar = function(block)
 
 			blocks[index] = next_data;
 			blocks[index + 1] = current_data;
+			set_edited();
 		}
 	});;
 
@@ -416,6 +433,7 @@ var block_delete = function(block)
 	var index = block.index('._block');
 	block_index_remove(index);
 	block.remove();
+	set_edited();
 }
 
 var block_index_remove = function(index)
