@@ -242,6 +242,8 @@ var render_fields = function(properties, name)
 				form += '<input type="file" name="' + property['key'] + '" value="' + image + '" /><br /><br />';
 			} else if (property['type'] === 'text') {
 				form += '<textarea class="ckeditor" name="' + field_name + '">' + $.trim(property['value']) + '</textarea>';
+			} else if (property['type'] === 'option') {
+				form += '<select name="' + field_name + '">' + $.trim(property['value']) + '</select>';
 			} else {
 				form += '<input type="text" name="' + field_name + '" value="' + $.trim(property['value']) + '" />';
 			}
