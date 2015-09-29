@@ -26,10 +26,6 @@ class Model_Base_Page_Block_Template extends Model_App {
 		),
   );
 
-  protected $_has_many = array(
-    'page_blocks' => array('model' => 'Page_Block'),
-  );
-
   public function rules()
   {
     return array(

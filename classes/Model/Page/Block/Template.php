@@ -8,4 +8,10 @@ class Model_Page_Block_Template extends Model_Base_Page_Block_Template {
   							->find_all();
   }
 
+  public static function view($page_block_template_id, $data = array())
+  {
+  	$view = Model_Page_Block_Template::factory('Page_Block_Template', $page_block_template_id)->view;
+  	return View::factory('page/block/' . $view, $data);
+  }
+
 }

@@ -38,6 +38,11 @@ class Model_Base_Page extends Model_App {
 			'data_type' => 'varchar',
 			'character_maximum_length' => '256',
 		),
+    'data' => array (
+			'data_type' => 'blob',
+			'is_nullable' => TRUE,
+			'character_maximum_length' => '65535',
+		),
     'published' => array (
 			'data_type' => 'tinyint',
 			'display' => '1',
@@ -49,10 +54,6 @@ class Model_Base_Page extends Model_App {
     'created_at' => array (
 			'data_type' => 'datetime',
 		),
-  );
-
-  protected $_has_many = array(
-    'blocks' => array('model' => 'Page_Block'),
   );
 
   protected $_belongs_to = array(
@@ -83,6 +84,9 @@ class Model_Base_Page extends Model_App {
         array('not_empty'),
         array('max_length', array(':value', 256)),
       ),
+      'data' => array(
+        array('max_length', array(':value', 65535)),
+      ),
       'published' => array(
         array('numeric'),
         array('not_empty'),
@@ -101,6 +105,7 @@ class Model_Base_Page extends Model_App {
       'slug' => __('Slug'),
       'title' => __('Title'),
       'meta_description' => __('Meta_description'),
+      'data' => __('Data'),
       'published' => __('Published'),
     );
   }

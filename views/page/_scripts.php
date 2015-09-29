@@ -1,4 +1,24 @@
-﻿<script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+﻿<?php if (isset($preview) AND $preview) : ?>
+
+<script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+<script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+
+<script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload.min.js"></script>
+
+<style>
+	._block {
+		position: relative;
+	}
+	._block ._edit_buttons {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		z-index: 9999;
+	}
+</style>
+
 <script>
 
 var edited = false;
@@ -111,8 +131,7 @@ var save_page = function() {
 var save_block = function(form, block) {
 	var query = {
 		page_id: page_id,
-		page_block_template_id: block.data('page-block-template-id'),
-		order: block.index('._block')
+		page_block_template_id: block.data('page-block-template-id')
 	};
 	var url = base_url + 'page_block/save?' + $.param(query);
 	form.find('input[type="file"]').remove();
@@ -497,3 +516,4 @@ var block_index_refresh = function()
 bind_toolbar();
 
 </script>
+<?php endif; ?>

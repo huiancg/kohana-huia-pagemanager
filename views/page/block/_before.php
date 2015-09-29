@@ -3,7 +3,6 @@ if ($preview) :
 $uid = '_block_' .uniqid();
 ?>
 <div id="<?php echo $uid; ?>" class="_block" 
-		data-order="<?php echo $_block->order; ?>" 
 		data-page-block-template-id="<?php echo $_block->page_block_template_id; ?>">
 	<script type="text/javascript">
 	var <?php echo $uid; ?> = <?php echo json_encode($_block->data); ?>;
