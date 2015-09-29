@@ -1,3 +1,4 @@
+﻿<script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
 <script>
 
 var edited = false;
@@ -13,25 +14,27 @@ $(window).bind('beforeunload', function(e) {
 
 var page_id = $('section.section:first').data('page-id');
 
+var _block_add;
+
 var _block_add_form = $('#_block_add_form').dialog({
 	autoOpen: false,
 	position: {
 		my: "center",
 		at: "center",
-		of: $('#_block_add a')
+		of: _block_add
 	},
 	buttons: {
 		'Adicionar': function() {
+			var that = $(this);
 			var page_block_template_id = $('#page_block_template_id').val();
 			var query = {
 				page_id: page_id,
-				page_block_template_id: page_block_template_id,
-				order: $('._block').size()
+				page_block_template_id: page_block_template_id
 			};
 			var url = base_url + 'page_block/save?' + $.param(query);
 			$.post(url).done(function(r) {
 				r = $(r);
-				$('#_block_add').before(r);
+				_block_add.before(r);
 				bind_toolbar(r);
 				_block_add_form.dialog('close');
 				set_edited();
@@ -43,15 +46,61 @@ var _block_add_form = $('#_block_add_form').dialog({
 	}
 });
 
-$('#_block_add a').click(function(e) {
+var get_sub_blocks = function(block) {
+	var adds = block.find('._block_add');
+	if ( ! adds.size()) {
+		return null;
+	}
+	var blocks = {};
+	adds.each(function() {
+		var that = $(this);
+		var block_name = that.data('block-name');
+		var block_col = that.closest('.block-col');
+		var _blocks = block_col.find('._block');
+		blocks[block_name] = [];
+		_blocks.each(function() {
+			var _block = $(this);
+			var sub_blocks = get_sub_blocks(_block);
+			var _data = window[_block.attr('id')];
+			console.info(_data);
+			blocks[block_name].push({
+				data: (sub_blocks) ? sub_blocks : _data,
+				page_block_template_id: _block.data('page-block-template-id')
+			});
+		});
+	});
+	return blocks;
+}
+
+window.errors = [];
+
+var get_blocks = function(block) {
+	var blocks = [];
+	$('._block:not(._block ._block)').each(function(index, el) {
+		var block = $(el);
+		var sub_blocks = get_sub_blocks(block);
+		var _data = window[block.attr('id')];
+		var data = {
+			data: (sub_blocks) ? sub_blocks : _data,
+			page_id: page_id,
+			page_block_template_id: block.data('page-block-template-id')
+		};
+		blocks.push(data);
+	});
+	return blocks;
+}
+
+$(document).on('click', '._block_add a', function(e) {
 	e.preventDefault();
+	_block_add = $(this).closest('._block_add');
+	current_block = $(this).closest('._block');
 	_block_add_form.dialog('open');
 });
 
 var save_page = function() {
 	var data = {
 		page_id: page_id,
-		blocks: blocks
+		blocks: get_blocks()
 	};
 	var url = base_url + 'page/save';
 	return $.post(url, data).success(function() {
@@ -172,8 +221,10 @@ var render_fields = function(properties, name)
 				form += '<img style="max-width: 100px;" src="' + image + '"><br />';
 				form += '<input type="hidden" name="' + field_name + '" value="' + image + '" /><br /><br />';
 				form += '<input type="file" name="' + property['key'] + '" value="' + image + '" /><br /><br />';
+			} else if (property['type'] === 'text') {
+				form += '<textarea class="ckeditor" name="' + field_name + '">' + $.trim(property['value']) + '</textarea>';
 			} else {
-				form += '<input type="text" name="' + field_name + '" value="' + property['value'] + '" />';
+				form += '<input type="text" name="' + field_name + '" value="' + $.trim(property['value']) + '" />';
 			}
 		}
 		first = false;
@@ -234,13 +285,26 @@ var modal_render = function(block)
 			of: block
 		},
 		open: function(event, ui) {
-			//
+			$('textarea.ckeditor', wando_modal).each(function() {
+				CKEDITOR.replace(this, {
+	    			toolbar: [
+							{ name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
+							{ name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
+							{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] }, 
+							{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] }
+						]
+	    	});
+			});
 		},
 		close: function(event, ui) {
 			wando_modal.remove();
 		},
 		buttons: {
 			'Aplicar': function() {
+				$('textarea.ckeditor', wando_modal).each(function () {
+					var $textarea = $(this);
+					$textarea.val(CKEDITOR.instances[$textarea.attr('name')].getData());
+				});
 				save_block(form, block).done(function(body) {
 					body = $(body);
 					block.replaceWith(body);
@@ -370,13 +434,6 @@ var bind_toolbar = function(block)
 		var prevBlock = block.prevAll('._block:first');
 		if (prevBlock.size()) {
 			block.prevAll('._block:first').before(block);
-			
-			var index = block.index('._block') + 1;
-			var current_data = blocks[index];
-			var prev_data = blocks[index - 1];
-
-			blocks[index] = prev_data;
-			blocks[index - 1] = current_data;
 			set_edited();
 		}
 	});
@@ -393,13 +450,6 @@ var bind_toolbar = function(block)
 		var nextBlock = block.nextAll('._block:first');
 		if (nextBlock.size()) {
 			block.nextAll('._block:first').after(block);
-			
-			var index = block.index('._block') - 1;
-			var current_data = blocks[index];
-			var next_data = blocks[index + 1];
-
-			blocks[index] = next_data;
-			blocks[index + 1] = current_data;
 			set_edited();
 		}
 	});;
@@ -430,26 +480,18 @@ var bind_toolbar = function(block)
 
 var block_delete = function(block)
 {
-	var index = block.index('._block');
-	block_index_remove(index);
 	block.remove();
 	set_edited();
-}
-
-var block_index_remove = function(index)
-{
-	blocks = _.reject(blocks, function(item, idx) {
-		return idx == index;
-	});
-	block_index_refresh();
 }
 
 var block_index_refresh = function()
 {
 	var index = 0;
+	/*
 	blocks = _.object(_.map(blocks, function (value, key) {
 		return [index++, value];
 	}));
+	*/
 }
 
 bind_toolbar();

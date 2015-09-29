@@ -28,9 +28,7 @@ class Model_Page extends Model_Base_Page {
 					$data = Arr::get($block, 'data');
 					if ($data AND $data !== 'null')
 					{
-						// ?
-						$data = (is_array($data)) ? Arr::get($data, 0) : $data;
-						
+						$data = (is_array($data) AND @json_encode($data)) ? json_encode($data) : $data;	
 						$model_page_block->data = $data;
 					}
 					$model_page_block->create();
@@ -97,7 +95,30 @@ class Model_Page extends Model_Base_Page {
 		return $model->find();
 	}
 
-	public function render_blocks()
+	public static function blocks($name, $blocks = array())
+	{
+		$result = '';
+
+		View::set_global('block_name', $name);
+	
+		if ($blocks)
+		{	
+			foreach ($blocks as $block)
+			{
+				$model = Model_Page_Block::factory('Page_Block');
+				$result .= $model->values($block)->render_view($name);
+			}
+		}
+
+		if (Auth::instance()->logged_in('admin'))
+		{
+			$result .= View::factory('page/block/_add', array('render_blocks' => FALSE));
+		}
+
+		return $result;
+	}
+
+	public function render_blocks($blocks = NULL)
 	{
 		if ( ! $this->loaded())
 		{
@@ -116,7 +137,7 @@ class Model_Page extends Model_Base_Page {
 
 		if (Auth::instance()->logged_in('admin'))
 		{
-			$result .= View::factory('page/block/_add');
+			$result .= View::factory('page/block/_add', array('render_blocks' => TRUE));
 		}
 
 		if ( ! $result)

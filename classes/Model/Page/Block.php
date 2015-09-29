@@ -20,10 +20,10 @@ class Model_Page_Block extends Model_Base_Page_Block {
   							->find_all();
   }
 
-	public function render_view()
+	public function render_view($block_name = NULL)
 	{
 		$template = $this->page_block_template;
-		$data = (array) @json_decode($this->data, TRUE);
+		$data = ( ! is_array($this->data)) ? (array) @json_decode($this->data, TRUE) : $this->data;
 		$data['_block'] = $this;
 		$data['_data'] = $data;
 		

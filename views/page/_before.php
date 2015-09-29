@@ -1,5 +1,11 @@
-<?php if ($preview) : ?>
+﻿<?php if ($preview) : ?>
 <style>
+  ._block {
+    position: relative;
+    min-height: 42px;
+    width: 100%;
+    float: left;
+  }
   ._block_toolbar {
     display: none;
     position: absolute;
