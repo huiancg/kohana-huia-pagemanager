@@ -2,50 +2,22 @@
 
 class Model_Page extends Model_Base_Page {
 
+	public static $_instance = NULL;
+
+	public static function instance()
+	{
+		if (Model_Page::$_instance === NULL)
+		{
+			Model_Page::$_instance = new Model_Page();	
+		}
+		return Model_Page::$_instance;
+	}
+
 	public static function draft($page_id, $blocks)
 	{
-		Database::instance()->begin();
-
-		$result = array();
-
-		try
-		{
-			$page = Model_Page::factory('Page', $page_id);
-
-			foreach ($page->blocks->find_all() as $block)
-			{
-				DB::delete('page_blocks')->where('id', '=', $block->id)->execute();
-			}
-
-			if ($blocks AND ! empty($blocks))
-			{
-				foreach ($blocks as $index => $block)
-				{
-					$model_page_block = Model_Page_Block::factory('Page_Block');
-					$model_page_block->order = $index;
-					$model_page_block->page_id = $page->id;
-					$model_page_block->page_block_template_id = Arr::get($block, 'page_block_template_id');
-					$data = Arr::get($block, 'data');
-					if ($data AND $data !== 'null')
-					{
-						$data = (is_array($data) AND @json_encode($data)) ? json_encode($data) : $data;	
-						$model_page_block->data = $data;
-					}
-					$model_page_block->create();
-				}
-			}
-
-			$result['page'] = $page->all_as_array();
-
-			Database::instance()->commit();
-		}
-		catch (Kohana_Database_Exception $e)
-		{
-			Database::instance()->rollback();
-			$result['errors'] = $e->getMessage();
-		}
-
-		return $result;
+		$page = Model_Page::factory('Page', $page_id);
+		$page->data = @json_encode($blocks, TRUE);
+		$page->update();
 	}
 
 	public function link_preview()
@@ -95,18 +67,15 @@ class Model_Page extends Model_Base_Page {
 		return $model->find();
 	}
 
-	public static function blocks($name, $blocks = array())
+	public function blocks($name, $blocks = array())
 	{
 		$result = '';
-
-		View::set_global('block_name', $name);
 	
-		if ($blocks)
+		if (count($blocks) AND $blocks)
 		{	
 			foreach ($blocks as $block)
 			{
-				$model = Model_Page_Block::factory('Page_Block');
-				$result .= $model->values($block)->render_view($name);
+				$result .= $this->render_block((object) $block, $name);
 			}
 		}
 
@@ -125,20 +94,14 @@ class Model_Page extends Model_Base_Page {
 			return '';
 		}
 
-		$result = '';
-		$blocks = $this->blocks->find_all_ordened();
-		if (count($blocks))
+		if ($blocks)
 		{
-			foreach ($blocks as $block)
-			{
-				$result .= $block->render_view();
-			}
+			$this->data = $blocks;
 		}
 
-		if (Auth::instance()->logged_in('admin'))
-		{
-			$result .= View::factory('page/block/_add', array('render_blocks' => TRUE));
-		}
+		$data = ($blocks) ? $blocks : @json_decode($this->data, TRUE);
+
+		$result = $this->blocks(NULL, $data);
 
 		if ( ! $result)
 		{
@@ -150,6 +113,28 @@ class Model_Page extends Model_Base_Page {
 		$after = View::factory('page/_after')->render();
 
 		return $before . $result . $after;
+	}
+
+	public function render_block($block, $block_name = NULL)
+	{
+		$block->data = isset($block->data) ? $block->data : array();
+		$block->data = ( ! is_array($block->data)) ? (array) @json_decode($block->data, TRUE) : $block->data;
+
+		$data['_block'] = $block;
+		$data['_data'] = $block->data;
+		
+		$after = View::factory('page/block/_after', $data);
+		$view = Model_Page_Block_Template::view($block->page_block_template_id, $data);
+		$before = View::factory('page/block/_before', $data);
+
+		$view->block_name = $block_name;
+		
+		if ( ! isset($view->page))
+		{
+			View::bind_global('page', $this);
+		}
+
+		return $before->render() . $view->render() . $after->render();
 	}
 
 }

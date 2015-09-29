@@ -13,14 +13,18 @@ class Controller_Page_Block extends Controller_App {
 
 	public function action_save()
 	{
-		$page_id = $this->request->query('page_id');
-		$page_block_template_id = $this->request->query('page_block_template_id');
-		$order = $this->request->query('order');
-		$block = $this->request->post();
+		$block = new stdClass();
+		$block->data = $this->request->post();
+		$block->page_id = $this->request->query('page_id');
+		$block->page_block_template_id = $this->request->query('page_block_template_id');
 
 		View::set_global('preview', TRUE);
+		View::set_global('save_block', TRUE);
 
-		$result = Model_Page_Block::draft($page_id, $page_block_template_id, $order, (array) @json_encode($block));
+		$page = Model_Page::factory('Page', $block->page_id);
+		View::bind_global('page', $page);
+
+		$result = Model_Page::render_block($block);
 		$this->response->body($result);
 	}
 

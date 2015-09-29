@@ -4,7 +4,7 @@
 	<a href="#">[+] Adicionar bloco</a>
 </div>
 
-<?php if (isset($render_blocks) AND $render_blocks) : ?>
+<?php if ( ! isset($save_block) OR ! $save_block) : ?>
   <div id="_block_add_form" title="Adicionar bloco">
     <form>
       <fieldset>

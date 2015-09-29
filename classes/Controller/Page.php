@@ -58,6 +58,7 @@ class Controller_Page extends Controller_App {
 		$blocks = $this->request->post('blocks');
 
 		$result = Model_Page::draft($page_id, $blocks);
+
 		$this->response->json($result);
 	}
 
