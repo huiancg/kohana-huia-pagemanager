@@ -67,9 +67,11 @@ class Model_Page extends Model_Base_Page {
 		return $model->find();
 	}
 
-	public function blocks($name, $blocks = array())
+	public function blocks($blocks = array(), $name = NULL)
 	{
 		$result = '';
+		
+		View::bind_global('block_name', $name);
 	
 		if (count($blocks) AND $blocks)
 		{	
@@ -101,7 +103,7 @@ class Model_Page extends Model_Base_Page {
 
 		$data = ($blocks) ? $blocks : @json_decode($this->data, TRUE);
 
-		$result = $this->blocks(NULL, $data);
+		$result = $this->blocks($data);
 
 		if ( ! $result)
 		{
@@ -126,8 +128,6 @@ class Model_Page extends Model_Base_Page {
 		$after = View::factory('page/block/_after', $data);
 		$view = Model_Page_Block_Template::view($block->page_block_template_id, $data);
 		$before = View::factory('page/block/_before', $data);
-
-		$view->block_name = $block_name;
 		
 		if ( ! isset($view->page))
 		{

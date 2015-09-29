@@ -19,7 +19,6 @@ class Controller_Page_Block extends Controller_App {
 		$block->page_block_template_id = $this->request->query('page_block_template_id');
 
 		View::set_global('preview', TRUE);
-		View::set_global('save_block', TRUE);
 
 		$page = Model_Page::factory('Page', $block->page_id);
 		View::bind_global('page', $page);
