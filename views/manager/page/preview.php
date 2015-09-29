@@ -88,10 +88,8 @@
 
 	$('#nav-btn-save').click(function(e) {
 		e.preventDefault();
-		iframe_contents.save_page().done(function(r) {
-			if (r) {
-				alert('Salvo!');
-			}
+		iframe_contents.save_page().success(function(r) {
+			alert('Salvo!');
 		});
 	});
 	
