@@ -453,8 +453,6 @@ var bind_block = function(block) {
 
 var bind_toolbar = function(block)
 {
-	block_index_refresh();
-
 	if (block) {
 		$('.block', block).each(function() {
 			app.block.start($(this));
@@ -463,8 +461,13 @@ var bind_toolbar = function(block)
 	} else {
 		$('._block').each(function() {
 			bind_block($(this));
-		})
+		});
 	}
+
+	// remove href functions
+	$('a', block).click(function(e) {
+		e.preventDefault();
+	});
 
 	var toolbar_buttons = $('._block_toolbar_button', block);
 
@@ -528,16 +531,6 @@ var block_delete = function(block)
 {
 	block.remove();
 	set_edited();
-}
-
-var block_index_refresh = function()
-{
-	var index = 0;
-	/*
-	blocks = _.object(_.map(blocks, function (value, key) {
-		return [index++, value];
-	}));
-	*/
 }
 
 bind_toolbar();
