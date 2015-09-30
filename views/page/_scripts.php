@@ -469,6 +469,11 @@ var bind_toolbar = function(block)
 		e.preventDefault();
 	});
 
+	// remove form submit functions
+	$('form', block).submit(function(e) {
+		e.preventDefault();
+	});
+
 	var toolbar_buttons = $('._block_toolbar_button', block);
 
 	toolbar_buttons.filter('._block_toolbar_up').button({
