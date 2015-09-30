@@ -23,7 +23,7 @@ class Controller_Page_Block extends Controller_App {
 		$page = Model_Page::factory('Page', $block->page_id);
 		View::bind_global('page', $page);
 
-		$result = Model_Page::render_block($block);
+		$result = Model_Page::instance()->render_block($block);
 		$this->response->body($result);
 	}
 
