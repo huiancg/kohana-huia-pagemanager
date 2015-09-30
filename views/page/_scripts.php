@@ -141,7 +141,14 @@ var save_block = function(form, block) {
 var parse_properties = function(block)
 {
 	block = $(block);
+	var block_id = block.attr('id');
 	var properties = block.find('[property]:not([property-type="repeat"] [property])');
+	properties.filter(function(index, el) {
+		var inner_block = $(el).closest('._block');
+		var inner_block_id = inner_block.attr('id');
+		console.info(inner_block_id, '===', block_id, inner_block_id === block_id);
+		return inner_block_id === block_id;
+	});
 	var objects = [];
 	_.forEach(properties, function(property) {
 		property = $(property);
@@ -309,10 +316,12 @@ var modal_render = function(block)
 			$('textarea.ckeditor', wando_modal).each(function() {
 				CKEDITOR.replace(this, {
 	    			toolbar: [
-							{ name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
-							{ name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
-							{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] }, 
-							{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] }
+							{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
+							{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+							{ name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'SpecialChar' ] },
+							'/',
+							{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
+							{ name: 'document', items: [ 'Source' ] }
 						]
 	    	});
 			});
@@ -422,9 +431,14 @@ var modal_render = function(block)
 }
 
 var bind_block = function(block) {
-	var properties = block.find('[property]');
+	var block_id = block.attr('id');
+	var properties = block.find('[property]').filter(function(index, el) {
+		var inner_block = $(el).closest('._block');
+		var inner_block_id = inner_block.attr('id');
+		return inner_block_id === block_id;
+	});
 	if ( ! properties.size()) {
-		block.find('._block_toolbar_edit').hide();	
+		block.find('._block_toolbar_edit:first').hide();	
 	}
 }
 
