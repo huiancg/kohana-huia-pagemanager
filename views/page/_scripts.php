@@ -135,7 +135,11 @@ var save_block = function(form, block) {
 	};
 	var url = base_url + 'page_block/save?' + $.param(query);
 	form.find('input[type="file"]').remove();
-	return $.post(url, form.serializeArray());
+	var sub_data = get_sub_blocks(block);
+	var data = form.serializeArray();
+	data = _.object(_.pluck(data, 'name'), _.pluck(data, 'value'));
+	data = $.extend({}, sub_data, data);
+	return $.post(url, data);
 }
 
 var parse_properties = function(block)
@@ -156,13 +160,18 @@ var parse_properties = function(block)
 		var key = property.attr('property');
 		var type = property.attr('property-type');
 		var value = property.html();
+		var node_name = property.prop('nodeName').toLowerCase();
 		if (type === 'repeat')
 		{
 			value = parse_properties('<div>' + value + '</div>');
 		}
-		else if (type === 'image')
+		else if (type === 'image' || node_name === 'img')
 		{
 			value = property.attr('src');
+		}
+		else if (node_name === 'input')
+		{
+			value = property.val();
 		}
 
 		var object = {
@@ -447,7 +456,9 @@ var bind_toolbar = function(block)
 	block_index_refresh();
 
 	if (block) {
-		app.block.start($('.block:first', block));
+		$('.block', block).each(function() {
+			app.block.start($(this));
+		});
 		bind_block(block);
 	} else {
 		$('._block').each(function() {
