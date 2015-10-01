@@ -1,5 +1,6 @@
 ﻿<?php if (isset($preview) AND $preview) : ?>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
 <script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
 
@@ -67,7 +68,7 @@ var _block_add_form = $('#_block_add_form').dialog({
 });
 
 var get_sub_blocks = function(block) {
-	var adds = block.find('._block_add');
+	var adds = filter_sub_elements(block, block.find('._block_add'));
 	if ( ! adds.size()) {
 		return null;
 	}
@@ -75,14 +76,19 @@ var get_sub_blocks = function(block) {
 	adds.each(function() {
 		var that = $(this);
 		var block_name = that.data('block-name');
-		var block_col = that.closest('.block-col');
-		var _blocks = block_col.find('._block');
+		var _blocks = that.parent().find('._block');
+
+		var block_id = that.closest('._block').attr('id');
+		_blocks = _blocks.filter(function() {
+			// lolz
+			return $(this).parents('._block').attr('id') === block_id;
+		});
+		
 		blocks[block_name] = [];
 		_blocks.each(function() {
 			var _block = $(this);
 			var sub_blocks = get_sub_blocks(_block);
 			var _data = window[_block.attr('id')];
-			console.info(_data);
 			blocks[block_name].push({
 				data: (sub_blocks) ? sub_blocks : _data,
 				page_block_template_id: _block.data('page-block-template-id')
@@ -91,8 +97,6 @@ var get_sub_blocks = function(block) {
 	});
 	return blocks;
 }
-
-window.errors = [];
 
 var get_blocks = function(block) {
 	var blocks = [];
@@ -142,17 +146,31 @@ var save_block = function(form, block) {
 	return $.post(url, data);
 }
 
+var filter_sub_blocks = function(block)
+{
+	var block_id = block.attr('id');
+	return elements.filter(function(index, el) {
+		var inner_block = $(el).closest('._block');
+		var inner_block_id = inner_block.attr('id');
+		return inner_block_id === block_id;
+	});
+}
+
+var filter_sub_elements = function(block, elements)
+{
+	var block_id = block.attr('id');
+	return elements.filter(function(index, el) {
+		var inner_block = $(el).closest('._block');
+		var inner_block_id = inner_block.attr('id');
+		return inner_block_id === block_id;
+	});
+}
+
 var parse_properties = function(block)
 {
 	block = $(block);
-	var block_id = block.attr('id');
 	var properties = block.find('[property]:not([property-type="repeat"] [property])');
-	properties = properties.filter(function(index, el) {
-		var inner_block = $(el).closest('._block');
-		var inner_block_id = inner_block.attr('id');
-		console.info(inner_block_id, '===', block_id, inner_block_id === block_id);
-		return inner_block_id === block_id;
-	});
+	properties = filter_sub_elements(block, properties);
 	var objects = [];
 	_.forEach(properties, function(property) {
 		property = $(property);
@@ -440,12 +458,7 @@ var modal_render = function(block)
 }
 
 var bind_block = function(block) {
-	var block_id = block.attr('id');
-	var properties = block.find('[property]').filter(function(index, el) {
-		var inner_block = $(el).closest('._block');
-		var inner_block_id = inner_block.attr('id');
-		return inner_block_id === block_id;
-	});
+	var properties = filter_sub_elements(block, block.find('[property]'));
 	if ( ! properties.size()) {
 		block.find('._block_toolbar_edit:first').hide();	
 	}

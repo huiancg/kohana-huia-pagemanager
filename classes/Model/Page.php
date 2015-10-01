@@ -67,12 +67,10 @@ class Model_Page extends Model_Base_Page {
 		return $model->find();
 	}
 
-	public function blocks($blocks = array(), $name = NULL)
+	public function blocks($blocks = array(), $name = NULL, $add_block = TRUE)
 	{
 		$result = '';
 		
-		View::bind_global('block_name', $name);
-	
 		if (count($blocks) AND $blocks)
 		{	
 			foreach ($blocks as $block)
@@ -81,9 +79,9 @@ class Model_Page extends Model_Base_Page {
 			}
 		}
 
-		if (Auth::instance()->logged_in('admin'))
+		if (Auth::instance()->logged_in('admin') AND $add_block)
 		{
-			$result .= View::factory('page/block/_add', array('render_blocks' => FALSE));
+			$result .= View::factory('page/block/_add', array('render_blocks' => FALSE, 'block_name' => $name));
 		}
 
 		return $result;
