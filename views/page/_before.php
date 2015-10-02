@@ -13,9 +13,6 @@
     right: 5px;
     z-index: 9999;
   }
-  ._block:hover ._block_toolbar {
-    display: block;
-  }
   .btn-add,
   .btn-remove {
     margin-bottom: 10px;

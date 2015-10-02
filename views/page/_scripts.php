@@ -18,6 +18,23 @@
 		right: 5px;
 		z-index: 9999;
 	}
+	._block_add a {
+		border: 1px solid #ffffff;
+		background: #393939;
+		color: #ffffff;
+		text-align: center;
+		padding: 10px 0;
+		margin: 10px 0;
+		float: left;
+		width: 100%;
+	}
+	._block:hover {
+		display: block;
+		background: rgba(0, 0, 0, 0.2);
+	}
+	._block:hover > ._block_toolbar {
+		display: block;
+	}
 </style>
 
 <script>
