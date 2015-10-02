@@ -18,12 +18,12 @@ class Block {
 		$this->view = $view;
 	}
 
-	public function get($name, $default = NULL)
+	public function get($data, $name, $default = NULL)
 	{
-		return Arr::get($this->block->data, $name, $default);
+		return Arr::get($data, $name, $default);
 	}
 
-	public function hidden($name, $default = NULL, $attrs = array())
+	public function hidden($data, $name, $default = NULL, $attrs = array())
 	{
 		if ( ! $this->view->preview)
 		{
@@ -35,10 +35,10 @@ class Block {
 		);
 		$attrs = Arr::merge($default_attrs, $attrs);
 
-		return Form::hidden($name, $this->get($name, $default), $attrs);
+		return Form::hidden($name, $this->get($data, $name, $default), $attrs);
 	}
 
-	public function option($name, $options, $default = NULL, $attrs = array())
+	public function option($data, $name, $options, $default = NULL, $attrs = array())
 	{
 		if ( ! $this->view->preview)
 		{
@@ -52,22 +52,33 @@ class Block {
 		);
 		$attrs = Arr::merge($default_attrs, $attrs);
 
-		return Form::select($name, $options, $this->get($name, $default), $attrs);
+		return Form::select($name, $options, $this->get($data, $name, $default), $attrs);
 	}
 
-	public function a($name, $default = NULL, $attrs = array())
+	public function a($data, $name, $default = NULL, $attrs = array())
 	{
 		$default_attrs = array(
 			'property' => $name,
 		);
 		$attrs = Arr::merge($default_attrs, $attrs);
 		$name_link = $name . '_link';
-		$title = $this->get($name, $default);
-		$href = $this->get($name_link);
+		$title = $this->get($data, $name, $default);
+		$href = $this->get($data, $name_link);
 		return HTML::anchor($href, $title, $attrs) . $this->hidden($name_link);
 	}
 
-	public function page_link($name)
+	public function image($data, $name, $default = NULL, $attrs = array())
+	{
+		$default_attrs = array(
+			'property' => $name,
+			'property-type' => 'image',
+		);
+		$attrs = Arr::merge($default_attrs, $attrs);
+		$href = $this->get($name, $default);
+		return HTML::image($href, $attrs);
+	}
+
+	public function page_link($data, $name)
 	{
 		if ( ! $this->view->preview)
 		{
