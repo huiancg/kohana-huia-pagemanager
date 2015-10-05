@@ -316,11 +316,23 @@ var fieldset_index = function(fieldset)
 
 	fieldsets.each(function(index, el) {
 		el = $(el);
-		el.data('index', index);
-		el.find('input[type="text"]').each(function() {
+		el.attr('data-index', index);
+		el.find('input[type="text"],textarea.ckeditor').each(function() {
 			var input = $(this);
 			var name = input.attr('name').replace(regex, group + '[' + index + ']');
 			input.attr('name', name);
+				if(input.hasClass("ckeditor") && !input.parent().find('.cke_reset').length){
+					CKEDITOR.replace(input.attr("name"),{
+		    			toolbar: [
+								{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
+								{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+								{ name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'SpecialChar' ] },
+								'/',
+								{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
+								{ name: 'document', items: [ 'Source' ] }
+							]
+		    	});
+			}
 		});
 	});
 }
@@ -328,7 +340,9 @@ var fieldset_index = function(fieldset)
 var fieldset_reset = function(fieldset)
 {
 	// clean inputs
-	fieldset.find('input[type="text",type="hidden"]').val('');
+	fieldset.find('input[type="text",type="hidden"],textarea').val('');
+
+	fieldset.find('.cke_reset').remove();
 	fieldset_index(fieldset.parent());
 	return fieldset;
 }
