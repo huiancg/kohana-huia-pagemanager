@@ -47,7 +47,7 @@ class Block {
 
 		$default_attrs = array(
 			'style' => 'display:none',
-			'property' => 'size',
+			'property' => $name,
 			'property-type' => 'option',
 		);
 		$attrs = Arr::merge($default_attrs, $attrs);
@@ -62,9 +62,13 @@ class Block {
 		);
 		$attrs = Arr::merge($default_attrs, $attrs);
 		$name_link = $name . '_link';
+		$name_link_internal = $name . '_link_internal';
 		$title = $this->get($data, $name, $default);
 		$href = $this->get($data, $name_link);
-		return HTML::anchor($href, $title, $attrs) . $this->hidden($name_link);
+		$href = ($href) ? $href : Model_Page::factory('Page', $this->get($data, $name_link_internal))->link();
+
+		$pages = Model_Page::factory('Page')->find_all_by_published(TRUE)->as_array('id', 'name');
+		return HTML::anchor($href, $title, $attrs) . $this->hidden($data, $name_link) . $this->option($data, $name_link_internal, $pages);
 	}
 
 	public function image($data, $name, $default = NULL, $attrs = array())
