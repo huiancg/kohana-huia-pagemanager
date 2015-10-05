@@ -18,6 +18,17 @@ class Block {
 		$this->view = $view;
 	}
 
+	public function pages($data, $name)
+	{
+		if ( ! $this->view->preview)
+		{
+			return;
+		}
+		
+		$pages = Model_Page::factory('Page')->find_all_by_published(TRUE)->as_array('id', 'name');
+		return $this->option($data, $name, $pages);
+	}
+
 	public function get($data, $name, $default = NULL)
 	{
 		return Arr::get($data, $name, $default);
@@ -67,8 +78,7 @@ class Block {
 		$href = $this->get($data, $name_link);
 		$href = ($href) ? $href : Model_Page::factory('Page', $this->get($data, $name_link_internal))->link();
 
-		$pages = Model_Page::factory('Page')->find_all_by_published(TRUE)->as_array('id', 'name');
-		return HTML::anchor($href, $title, $attrs) . $this->hidden($data, $name_link) . $this->option($data, $name_link_internal, $pages);
+		return HTML::anchor($href, $title, $attrs) . $this->hidden($data, $name_link) . $this->pages($data, $name_link_internal);
 	}
 
 	public function image($data, $name, $default = NULL, $attrs = array())
@@ -80,17 +90,6 @@ class Block {
 		$attrs = Arr::merge($default_attrs, $attrs);
 		$href = $this->get($name, $default);
 		return HTML::image($href, $attrs);
-	}
-
-	public function page_link($data, $name)
-	{
-		if ( ! $this->view->preview)
-		{
-			return;
-		}
-		$html = '<div style="display:none;" property="' . $name . '" property-type="repeat">';
-		// return Form::hidden($name, $this->get($name, $default, $attrs), $attrs);
-		return $html;
 	}
 
 }
