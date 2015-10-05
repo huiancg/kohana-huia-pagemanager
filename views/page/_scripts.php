@@ -176,7 +176,7 @@ var filter_sub_elements = function(block, elements)
 var parse_properties = function(block)
 {
 	block = $(block);
-	var properties = block.find('[property]:not([property-type="repeat"] [property])');
+	var properties = block.find('[property]:not([property-type="repeat"] [property], .cloned)');
 	properties = filter_sub_elements(block, properties);
 	var objects = [];
 	_.forEach(properties, function(property) {
