@@ -105,9 +105,9 @@ var get_sub_blocks = function(block) {
 		_blocks.each(function() {
 			var _block = $(this);
 			var sub_blocks = get_sub_blocks(_block);
-			var _data = window[_block.attr('id')];
+			var _data =_.extend({}, window[_block.attr('id')], sub_blocks);
 			blocks[block_name].push({
-				data: (sub_blocks) ? sub_blocks : _data,
+				data: _data,
 				page_block_template_id: _block.data('page-block-template-id')
 			});
 		});
@@ -115,14 +115,14 @@ var get_sub_blocks = function(block) {
 	return blocks;
 }
 
-var get_blocks = function(block) {
+var get_blocks = function() {
 	var blocks = [];
 	$('._block:not(._block ._block)').each(function(index, el) {
 		var block = $(el);
 		var sub_blocks = get_sub_blocks(block);
-		var _data = window[block.attr('id')];
+		var _data = _.extend({}, window[block.attr('id')], sub_blocks);
 		var data = {
-			data: (sub_blocks) ? sub_blocks : _data,
+			data: _data,
 			page_id: page_id,
 			page_block_template_id: block.data('page-block-template-id')
 		};
@@ -156,7 +156,7 @@ var save_block = function(form, block) {
 	};
 	var url = base_url + 'page_block/save?' + $.param(query);
 	form.find('input[type="file"]').remove();
-	var sub_data = get_sub_blocks(block);
+	var sub_data = _.extend({}, window[block.attr('id')], get_sub_blocks(block));
 	var data = form.serializeArray();
 	data = _.object(_.pluck(data, 'name'), _.pluck(data, 'value'));
 	data = $.extend({}, sub_data, data);
