@@ -270,6 +270,9 @@ var render_fields = function(properties, name)
 			form += '</fieldset>';
 		} else if (property['type'] === 'repeat') {
 			if (first) {
+				if ((/\[.*\]/).test(group)) {
+					group = group + '[' + property['key'] + ']';
+				}
 				form += '<fieldset class="data_group" data-group="' + group + '">';
 				form += '<legend>' + property['key'] + '</legend>';
 				open_field = true;
@@ -299,7 +302,6 @@ var render_fields = function(properties, name)
 				form += '<input type="text" name="' + field_name + '" value="' + $.trim(property['value']) + '" />';
 			}
 		}
-		first = false;
 	});
 	if (open_field) {
 		form += '<div><a class="btn-add">Adicionar</a></div>';
