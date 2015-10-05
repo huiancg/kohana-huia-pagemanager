@@ -156,10 +156,10 @@ var save_block = function(form, block) {
 	};
 	var url = base_url + 'page_block/save?' + $.param(query);
 	form.find('input[type="file"]').remove();
-	var sub_data = _.extend({}, window[block.attr('id')], get_sub_blocks(block));
+	var sub_data = get_sub_blocks(block);
 	var data = form.serializeArray();
 	data = _.object(_.pluck(data, 'name'), _.pluck(data, 'value'));
-	data = $.extend({}, sub_data, data);
+	data = _.extend({}, sub_data, data);
 	return $.post(url, data);
 }
 
