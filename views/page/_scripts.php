@@ -159,18 +159,8 @@ var save_block = function(form, block) {
 	var sub_data = get_sub_blocks(block);
 	var data = form.serializeArray();
 	data = _.object(_.pluck(data, 'name'), _.pluck(data, 'value'));
-	data = _.extend({}, sub_data, data);
+	data = _.extend({}, data, sub_data);
 	return $.post(url, data);
-}
-
-var filter_sub_blocks = function(block)
-{
-	var block_id = block.attr('id');
-	return elements.filter(function(index, el) {
-		var inner_block = $(el).closest('._block');
-		var inner_block_id = inner_block.attr('id');
-		return inner_block_id === block_id;
-	});
 }
 
 var filter_sub_elements = function(block, elements)
@@ -319,21 +309,21 @@ var fieldset_index = function(fieldset)
 	fieldsets.each(function(index, el) {
 		el = $(el);
 		el.attr('data-index', index);
-		el.find('input[type="text"],textarea.ckeditor').each(function() {
+		el.find('input[type="text"],input[type="hidden"],textarea.ckeditor').each(function() {
 			var input = $(this);
 			var name = input.attr('name').replace(regex, group + '[' + index + ']');
 			input.attr('name', name);
-				if(input.hasClass("ckeditor") && !input.parent().find('.cke_reset').length){
-					CKEDITOR.replace(input.attr("name"),{
-		    			toolbar: [
-								{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
-								{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
-								{ name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'SpecialChar' ] },
-								'/',
-								{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
-								{ name: 'document', items: [ 'Source' ] }
-							]
-		    	});
+			if(input.hasClass("ckeditor") && !input.parent().find('.cke_reset').length){
+				CKEDITOR.replace(input.attr("name"), {
+	    			toolbar: [
+							{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
+							{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+							{ name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'SpecialChar' ] },
+							'/',
+							{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
+							{ name: 'document', items: [ 'Source' ] }
+						]
+	    	});
 			}
 		});
 	});
