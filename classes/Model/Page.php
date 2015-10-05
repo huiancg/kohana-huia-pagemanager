@@ -37,7 +37,9 @@ class Model_Page extends Model_Base_Page {
 			return '';
 		}
 
-		return URL::site($this->page_category->slug . '/' . $this->slug);
+		$prepend = ($this->page_category_id) ? $this->page_category->slug . '/' : '';
+
+		return URL::site($prepend . $this->slug);
 	}
 
 	public static function slug_exists($slug)
