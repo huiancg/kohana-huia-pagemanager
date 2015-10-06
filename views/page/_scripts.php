@@ -243,7 +243,6 @@ var render_fields = function(properties, name)
 {
 	var form = '';
 	var first = true;
-	var open_field = false;
 	_.each(properties, function(property, index) {
 		var group = name || property['key'];
 		var el = property['element'];
@@ -259,15 +258,16 @@ var render_fields = function(properties, name)
 				form += '</div>';
 			form += '</fieldset>';
 		} else if (property['type'] === 'repeat') {
-			if (first) {
-				if ((/\[.*\]/).test(group)) {
-					group = group + '[' + property['key'] + ']';
-				}
-				form += '<fieldset class="data_group" data-group="' + group + '">';
-				form += '<legend>' + property['key'] + '</legend>';
-				open_field = true;
+			if ((/\[.*\]/).test(group)) {
+				group = group + '[' + property['key'] + ']';
 			}
+			form += '<fieldset class="data_group" data-group="' + group + '">';
+			form += '<legend>' + property['key'] + '</legend>';
+
 			form += render_fields(property['value'], group);
+			
+			form += '<div><a class="btn-add">Adicionar</a></div>';
+			form += '</fieldset>';
 		} else {
 			form += '<label for="' + property['key'] + '">' + property['key'] + '</label>';
 			
@@ -293,10 +293,6 @@ var render_fields = function(properties, name)
 			}
 		}
 	});
-	if (open_field) {
-		form += '<div><a class="btn-add">Adicionar</a></div>';
-		form += '</fieldset>';			
-	}
 	return form;
 }
 

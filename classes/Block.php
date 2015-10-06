@@ -66,15 +66,18 @@ class Block {
 		return Form::select($name, $options, $this->get($data, $name, $default), $attrs);
 	}
 
-	public function a($data, $name, $default = NULL, $attrs = array())
+	public function a($data, $name, $default = NULL, $attrs = array(), $force = FALSE)
 	{
 		$default_attrs = array(
 			'property' => $name,
 		);
-		$attrs = Arr::merge($default_attrs, $attrs);
+		if ( ! $force)
+		{
+			$attrs = Arr::merge($default_attrs, $attrs);
+		}
 		$name_link = $name . '_link';
 		$name_link_internal = $name . '_link_internal';
-		$title = $this->get($data, $name, $default);
+		$title = ($force) ? $default : $this->get($data, $name, $default);
 		$href = $this->get($data, $name_link);
 		$href = ($href) ? $href : Model_Page::factory('Page', $this->get($data, $name_link_internal))->link();
 
@@ -88,7 +91,7 @@ class Block {
 			'property-type' => 'image',
 		);
 		$attrs = Arr::merge($default_attrs, $attrs);
-		$href = $this->get($name, $default);
+		$href = $this->get($data, $name, $default);
 		return HTML::image($href, $attrs);
 	}
 
