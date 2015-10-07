@@ -36,11 +36,6 @@ class Block {
 
 	public function hidden($data, $name, $default = NULL, $attrs = array())
 	{
-		if ( ! $this->view->preview)
-		{
-			return;
-		}
-
 		$default_attrs = array(
 			'property' => $name,
 		);
