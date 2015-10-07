@@ -17,7 +17,24 @@ class Model_Page extends Model_Base_Page {
 	{
 		$page = Model_Page::factory('Page', $page_id);
 		$page->data = @json_encode($blocks, TRUE);
-		$page->update();
+		$page->published = FALSE;
+		try
+		{
+			$page->save();
+		}
+		catch (ORM_Validation_Exception $e)
+		{
+			echo Debug::vars($e->errors(''));
+		}
+	}
+
+	public function has_draft($id_page)
+	{
+		$model = Model_Page::factory('Page');
+		$model->where('id_page', '=', $id_page);
+		$model->where('draft', '=', TRUE);
+		$has_draft = (bool) $model->count_all();
+		return $has_draft;
 	}
 
 	public function link_preview()

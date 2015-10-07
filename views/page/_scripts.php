@@ -487,7 +487,11 @@ var bind_toolbar = function(block)
 {
 	if (block) {
 		$('.block', block).each(function() {
-			app.block.start($(this));
+			if ( ! window.block_starter) {
+				alert('Você precisa setar um iniciador de blocks. "block_starter"');
+				return;
+			}
+			block_starter($(this));
 		});
 		bind_block(block);
 	} else {
