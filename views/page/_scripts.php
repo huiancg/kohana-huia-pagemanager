@@ -39,6 +39,8 @@
 
 <script>
 
+CKEDITOR.config.allowedContent = true;
+
 var edited = false;
 var set_edited = function(status) {
 	edited = (status !== undefined) ? status : true;
