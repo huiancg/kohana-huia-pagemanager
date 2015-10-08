@@ -45,6 +45,7 @@ class Model_Base_Page extends Model_App {
 		),
     'published' => array (
 			'data_type' => 'tinyint',
+			'is_nullable' => TRUE,
 			'display' => '1',
 		),
     'updated_at' => array (
@@ -54,6 +55,11 @@ class Model_Base_Page extends Model_App {
     'created_at' => array (
 			'data_type' => 'datetime',
 		),
+  );
+
+  protected $_has_many = array(
+    'links' => array('model' => 'Link'),
+    'page_block_templates' => array('model' => 'Page_Block_Template', 'through' => 'page_block_templates_pages'),
   );
 
   protected $_belongs_to = array(
@@ -89,7 +95,6 @@ class Model_Base_Page extends Model_App {
       ),
       'published' => array(
         array('numeric'),
-        array('not_empty'),
         array('max_length', array(':value', 1)),
       ),
     );
@@ -107,6 +112,7 @@ class Model_Base_Page extends Model_App {
       'meta_description' => __('Meta_description'),
       'data' => __('Data'),
       'published' => __('Published'),
+      'page_block_templates' => __('Page_block_templates'),
     );
   }
 

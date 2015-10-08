@@ -14,4 +14,15 @@ class Model_Page_Block_Template extends Model_Base_Page_Block_Template {
   	return View::factory('page/block/' . $view, $data);
   }
 
+  public function containers()
+  {
+    $response = array();
+    $containers = $this->containers->find_all();
+    foreach ($containers as $container)
+    {
+      $response[] = (int) $container->id;
+    }
+    return $response;
+  }
+
 }

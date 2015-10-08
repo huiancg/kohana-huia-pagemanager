@@ -26,6 +26,11 @@ class Model_Base_Page_Block_Template extends Model_App {
 		),
   );
 
+  protected $_has_many = array(
+    'containers' => array('model' => 'Page_Block_Template_Container'),
+    'pages' => array('model' => 'Page', 'through' => 'page_block_templates_pages'),
+  );
+
   public function rules()
   {
     return array(
@@ -46,6 +51,7 @@ class Model_Base_Page_Block_Template extends Model_App {
     return array(
       'name' => __('Name'),
       'view' => __('View'),
+      'pages' => __('Pages'),
     );
   }
 
