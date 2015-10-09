@@ -66,12 +66,15 @@ var _block_add_form = $('#_block_add_form').dialog({
 		of: _block_add
 	},
 	open: function(evt) {
-		console.info(evt.target);
+		$('#page_block_template_id').val($('#page_block_template_id option:first').val());
 	},
 	buttons: {
 		'Adicionar': function() {
 			var that = $(this);
 			var page_block_template_id = $('#page_block_template_id').val();
+			if ( ! page_block_template_id) {
+				return alert('Selecione um template.');
+			}
 			var query = {
 				page_id: page_id,
 				page_block_template_id: page_block_template_id
@@ -90,6 +93,8 @@ var _block_add_form = $('#_block_add_form').dialog({
 		}
 	}
 });
+
+var _block_add_select = _block_add_form.find('select[name="page_block_template_id"]');
 
 var get_sub_blocks = function(block) {
 	var adds = filter_sub_elements(block, block.find('._block_add'));
@@ -147,26 +152,38 @@ $(document).on('click', '._block_add a', function(e) {
 });
 
 var filter_containers = function(el) {
-	var select = _block_add_form.find('select[name="page_block_template_id"]');
+	var select = _block_add_select.clone();
 	var options = select.find('option');
-	
-	// set all options visible
-	options.show();
 	
 	var current_block = el.closest('._block');
 	var template_id = current_block.data('page-block-template-id');
-	
+	var first_level = ! template_id;
+
 	_.each(options, (option) => {
 		option = $(option);
+		
 		let containers = option.data('containers');
-		let is_valid = ( ! template_id && ! containers.length) || _.find(containers, function(i) {
+
+		let has_containers = containers.length;
+
+		let valid_containers = _.find(containers, function(i) {
 			return i == template_id;
 		});
-		if ( ! is_valid) {
-			option.hide();
+
+		let invalid;
+		
+		if (first_level) {
+			invalid = has_containers;
+		} else if (has_containers) {
+			invalid =  ! valid_containers;
+		}
+
+		if (invalid) {
+			option.remove();
 		}
 	});
 
+	_block_add_form.find('select[name="page_block_template_id"]').replaceWith(select);
 }
 
 var save_page = function() {
