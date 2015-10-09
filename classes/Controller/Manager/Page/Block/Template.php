@@ -24,7 +24,10 @@ class Controller_Manager_Page_Block_Template extends Controller_Manager_App {
 		$this->request->post('containers', array());
 		$page_block_template_id = $this->request->param('id');
 
-		Model_Page_Block_Template_Container::save_template($page_block_template_id, $containers);
+		if ($containers AND is_array($containers))
+		{
+			Model_Page_Block_Template_Container::save_template($page_block_template_id, $containers);
+		}
 
 		parent::save();
 	}
