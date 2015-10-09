@@ -68,7 +68,7 @@ class Model_Page_Block_Template extends Model_Base_Page_Block_Template {
     $containers = $this->containers->find_all();
     foreach ($containers as $container)
     {
-      $response[] = (int) $container->id;
+      $response[] = (int) $container->container_id;
     }
     return $response;
   }

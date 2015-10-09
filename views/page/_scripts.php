@@ -39,6 +39,8 @@
 
 <script>
 
+'use strict';
+
 CKEDITOR.config.allowedContent = true;
 
 var edited = false;
@@ -62,6 +64,9 @@ var _block_add_form = $('#_block_add_form').dialog({
 		my: "center",
 		at: "center",
 		of: _block_add
+	},
+	open: function(evt) {
+		console.info(evt.target);
 	},
 	buttons: {
 		'Adicionar': function() {
@@ -135,10 +140,34 @@ var get_blocks = function() {
 
 $(document).on('click', '._block_add a', function(e) {
 	e.preventDefault();
-	_block_add = $(this).closest('._block_add');
-	current_block = $(this).closest('._block');
+	var that = $(this);
+	_block_add = that.closest('._block_add');
+	filter_containers(that);
 	_block_add_form.dialog('open');
 });
+
+var filter_containers = function(el) {
+	var select = _block_add_form.find('select[name="page_block_template_id"]');
+	var options = select.find('option');
+	
+	// set all options visible
+	options.show();
+	
+	var current_block = el.closest('._block');
+	var template_id = current_block.data('page-block-template-id');
+	
+	_.each(options, (option) => {
+		option = $(option);
+		let containers = option.data('containers');
+		let is_valid = ( ! template_id && ! containers.length) || _.find(containers, function(i) {
+			return i == template_id;
+		});
+		if ( ! is_valid) {
+			option.hide();
+		}
+	});
+
+}
 
 var save_page = function() {
 	var data = {
