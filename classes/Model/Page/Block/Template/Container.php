@@ -34,25 +34,29 @@ class Model_Page_Block_Template_Container extends Model_Base_Page_Block_Template
     return $query->execute()->as_array(NULL, 'container_id');
   }
 
-  public static function save_template($page_block_template_id, $containers)
+  public static function save_template($page_block_template_id, $containers = NULL)
   {
     $ids = Model_Page_Block_Template_Container::container_ids($page_block_template_id);
-    
-    foreach ($containers as $container_id)
-    {
-      $exists = in_array($container_id, $ids);
-      if ( ! $exists)
+    $has_containers = $containers AND is_array($containers);
+   
+    if ($has_containers)
+    { 
+      foreach ($containers as $container_id)
       {
-        $model = Model_Page_Block_Template_Container::factory('Page_Block_Template_Container');
-        $model->container_id = $container_id;
-        $model->page_block_template_id = $page_block_template_id;
-        $model->create();
+        $exists = in_array($container_id, $ids);
+        if ( ! $exists)
+        {
+          $model = Model_Page_Block_Template_Container::factory('Page_Block_Template_Container');
+          $model->container_id = $container_id;
+          $model->page_block_template_id = $page_block_template_id;
+          $model->create();
+        }
       }
     }
 
     foreach ($ids as $container_id)
     {
-      if ( ! in_array($container_id, $containers))
+      if ( ! $has_containers OR ! in_array($container_id, $containers))
       {
         Model_Page_Block_Template_Container::remove_template($page_block_template_id, $container_id);
       }
