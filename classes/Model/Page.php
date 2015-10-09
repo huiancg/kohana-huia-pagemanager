@@ -17,7 +17,7 @@ class Model_Page extends Model_Base_Page {
 	{
 		$page = Model_Page::factory('Page', $page_id);
 		$page->data = @json_encode($blocks, TRUE);
-		$page->published = FALSE;
+		// $page->published = FALSE;
 		try
 		{
 			$page->save();
