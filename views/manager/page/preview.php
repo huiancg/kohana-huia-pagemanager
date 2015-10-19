@@ -34,10 +34,10 @@
 
 		<div class="btn-group" role="group">
 			<div class="btn-group">
-				<button type="button" class="btn btn-default nav-btn-resolution" data-rotate="true">
-					<span class="glyphicon glyphicon-repeat"></span> Rotare
+				<button type="button" class="disabled btn btn-default nav-btn-resolution" data-rotate="true">
+					<span class="glyphicon glyphicon-repeat"></span> Rotate
 				</button>
-				<button type="button" class="btn btn-default nav-btn-resolution">Desktop</button>
+				<button type="button" class="btn btn-default nav-btn-resolution is_desktop active">Desktop</button>
 				<button type="button" class="btn btn-default nav-btn-resolution" data-width="1024" data-height="768">Tablet</button>
 				<button type="button" class="btn btn-default nav-btn-resolution" data-width="320" data-height="568">Mobile</button>
 			</div>
@@ -98,17 +98,39 @@
 		iframe_contents._block_add_form.dialog('open');
 	});
 
+	var current_resoluton = $('.nav-btn-resolution.active:first');
+	var btn_rotate = $('.nav-btn-resolution[data-rotate]:first');
 	$('.nav-btn-resolution').click(function(e) {
 		e.preventDefault();
 		var that = $(this);
+
+		if (current_resoluton == that) {
+			return;
+		}
+		current_resoluton.removeClass('active');
+		that.addClass('active');
+
+		var that_width = that.data('width');
+		var that_height = that.data('height');
+		var is_desktop = that.is('.is_desktop');
+		
+		if ( ! is_desktop) {
+			btn_rotate.removeClass('disabled');
+		} else {
+			btn_rotate.addClass('disabled');
+		}
+
 		if (that.data('rotate')) {
 			var width = iframe_width;
 			iframe_width = iframe_height;
 			iframe_height = width;
 		} else {
-			iframe_width = that.data('width');
-			iframe_height = that.data('height');
+			iframe_width = that_width;
+			iframe_height = that_height;
 		}
+		
+		current_resoluton = that;
+
 		iframe_page_refresh();
 	})
 
