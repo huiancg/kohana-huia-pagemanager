@@ -163,15 +163,15 @@ var filter_containers = function(el) {
 	_.each(options, (option) => {
 		option = $(option);
 		
-		let containers = option.data('containers');
+		var containers = option.data('containers');
 
-		let has_containers = containers.length;
+		var has_containers = containers.length;
 
-		let valid_containers = _.find(containers, function(i) {
+		var valid_containers = _.find(containers, function(i) {
 			return i == template_id;
 		});
 
-		let invalid;
+		var invalid;
 		
 		if (first_level) {
 			invalid = has_containers;
@@ -196,11 +196,11 @@ var save_page = function() {
 	
 	function get_preview()
 	{
-		let def = $.Deferred();
+		var def = $.Deferred();
 		var add_buttons = $('._block_add').hide();
 		html2canvas($('body'), {
 			onrendered: function(canvas) {
-				let jpeg = canvas.toDataURL("image/jpeg");
+				var jpeg = canvas.toDataURL("image/jpeg");
 				add_buttons.show();
 				def.resolve('success', jpeg)
 		  }
@@ -208,9 +208,9 @@ var save_page = function() {
 		return def.promise();
 	}
 
-	let preview = get_preview();
+	var preview = get_preview();
 
-	let result = $.when(get_preview());
+	var result = $.when(get_preview());
 	
 	return result.then(function(success, image) {
 			data.image = image;
