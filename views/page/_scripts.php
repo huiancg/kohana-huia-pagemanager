@@ -56,7 +56,7 @@ $(window).bind('beforeunload', function(e) {
 
 var page_id = $('section.section:first').data('page-id');
 
-var _block_add = $('section.section > ._block_add a');
+var _block_add = $('section.section > ._block_add');
 
 var _block_add_form = $('#_block_add_form').dialog({
 	autoOpen: false,
