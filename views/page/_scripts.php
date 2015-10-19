@@ -31,6 +31,7 @@
 	._block:hover {
 		display: block;
 		background: rgba(0, 0, 0, 0.2);
+		z-index: 5;
 	}
 	._block:hover > ._block_toolbar {
 		display: block;
