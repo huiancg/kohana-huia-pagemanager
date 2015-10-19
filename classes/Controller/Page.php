@@ -47,6 +47,23 @@ class Controller_Page extends Controller_App {
 		$this->description = $this->page->meta_description;
 	}
 
+	public function base64_to_jpeg($base64_string, $output_file)
+	{
+		$ifp = fopen($output_file, "wb");
+		$data = explode(',', $base64_string);
+		fwrite($ifp, base64_decode($data[1])); 
+		fclose($ifp);
+		return $output_file; 
+	}
+
+	public function save_image($page_id, $image)
+	{
+    $dir = DOCROOT.'public'.DIRECTORY_SEPARATOR.'upload'.DIRECTORY_SEPARATOR.'page_preview'.DIRECTORY_SEPARATOR;
+    create_dir($dir);
+    $file = $dir . $page_id . '.jpg';
+    $this->base64_to_jpeg($image, $file);
+	}
+
 	public function action_save()
 	{
 		if ( ! Auth::instance()->logged_in('admin'))
@@ -58,6 +75,8 @@ class Controller_Page extends Controller_App {
 		$blocks = $this->request->post('blocks');
 
 		$result = Model_Page::draft($page_id, $blocks);
+		
+		$image = $this->save_image($page_id, $this->request->post('image'));
 
 		$this->response->json($result);
 	}

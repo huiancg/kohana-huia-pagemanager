@@ -56,7 +56,7 @@ $(window).bind('beforeunload', function(e) {
 
 var page_id = $('section.section:first').data('page-id');
 
-var _block_add;
+var _block_add = $('section.section > ._block_add a');
 
 var _block_add_form = $('#_block_add_form').dialog({
 	autoOpen: false,
@@ -192,9 +192,31 @@ var save_page = function() {
 		blocks: get_blocks()
 	};
 	var url = base_url + 'page/save';
-	return $.post(url, data).success(function() {
-		set_edited(false);
-	});
+	
+	function get_preview()
+	{
+		let def = $.Deferred();
+		var add_buttons = $('._block_add').hide();
+		html2canvas($('body'), {
+			onrendered: function(canvas) {
+				let jpeg = canvas.toDataURL("image/jpeg");
+				add_buttons.show();
+				def.resolve('success', jpeg)
+		  }
+		});
+		return def.promise();
+	}
+
+	let preview = get_preview();
+
+	let result = $.when(get_preview());
+	
+	return result.then(function(success, image) {
+			data.image = image;
+			return $.post(url, data).success(function() {
+				set_edited(false);
+			});
+		});
 }
 
 var save_block = function(form, block) {
