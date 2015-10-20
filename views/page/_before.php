@@ -1,4 +1,4 @@
-﻿<?php if ($preview) : ?>
+<?php if ($preview) : ?>
 <style>
   ._block {
     position: relative;

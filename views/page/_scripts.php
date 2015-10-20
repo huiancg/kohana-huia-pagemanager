@@ -1,4 +1,4 @@
-﻿<?php if (isset($preview) AND $preview) : ?>
+<?php if (isset($preview) AND $preview) : ?>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
