@@ -70,6 +70,8 @@
 
 	var iframe_page = $("#iframe-page");
 
+	var nav_btn_save = $('#nav-btn-save');
+
 	navbar.after(buttons_navbar);
 
 	function iframe_page_refresh() {
@@ -78,6 +80,12 @@
 		iframe_width = iframe_width || '100%';
 		iframe_page.width(iframe_width);
 		iframe_page.css('margin-top', buttons_navbar.height() + 20);
+
+		if (iframe_contents.edited != undefined && iframe_contents.edited) {
+			nav_btn_save.removeClass('disabled');
+		} else {
+			nav_btn_save.addClass('disabled');
+		}
 	}
 
 	$("#iframe-page").load(iframe_page_refresh);
@@ -86,9 +94,9 @@
 	
 	setInterval(iframe_page_refresh, 1000);
 
-	$('#nav-btn-save').click(function(e) {
+	nav_btn_save.click(function(e) {
 		e.preventDefault();
-		iframe_contents.save_page().success(function(r) {
+		iframe_contents.save_page().then(function(r) {
 			alert('Salvo!');
 		});
 	});
