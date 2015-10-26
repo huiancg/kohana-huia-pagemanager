@@ -1,6 +1,6 @@
 <?php if (isset($preview) AND $preview) : ?>
 
-  <div id="_block_add_form" title="Adicionar bloco">
+  <div id="_block_add_form" title="Adicionar bloco" data-page-id="<?php echo $page->id; ?>">
     <form>
       <fieldset>
         <label for="page_block_template_id">Template</label>

@@ -24,7 +24,7 @@ class Model_Page extends Model_Base_Page {
 		}
 		catch (ORM_Validation_Exception $e)
 		{
-			echo Debug::vars($e->errors(''));
+			throw new Exception(join(" | \n",$e->errors('')));
 		}
 	}
 

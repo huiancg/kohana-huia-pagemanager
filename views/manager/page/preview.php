@@ -76,6 +76,9 @@
 
 	function iframe_page_refresh() {
 		var height = iframe_height || $("#iframe-page").contents().find("body").height();
+		if (height < 600) {
+			height = 600;
+		}
 		iframe_page.height(height);
 		iframe_width = iframe_width || '100%';
 		iframe_page.width(iframe_width);

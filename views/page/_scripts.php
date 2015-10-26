@@ -1,11 +1,17 @@
 <?php if (isset($preview) AND $preview) : ?>
 
+<script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"><\/script>')</script>
+<script>window._ || document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"><\/script>')</script>
+<script>window.Backbone || document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.2/backbone-min.js"><\/script>')</script>
+<script>window.jQuery.ui || document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"><\/script>')</script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
 <script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
 
 <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload.min.js"></script>
 
 <style>
@@ -55,7 +61,7 @@ $(window).bind('beforeunload', function(e) {
 	}
 });
 
-var page_id = $('section.section:first').data('page-id');
+var page_id = parseInt($('#_block_add_form').data('page-id'));
 
 var _block_add = $('section.section > ._block_add');
 
@@ -214,6 +220,7 @@ var save_page = function() {
 	
 	return result.then(function(success, image) {
 			data.image = image;
+			console.info(data);
 			return $.post(url, data).success(function() {
 				set_edited(false);
 			});
