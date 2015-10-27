@@ -3,8 +3,8 @@
 <script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"><\/script>')</script>
 <script>window._ || document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"><\/script>')</script>
 <script>window.Backbone || document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.2/backbone-min.js"><\/script>')</script>
-<script>window.jQuery.ui || document.write('<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"><\/script>')</script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
