@@ -17,22 +17,52 @@ class Model_Page extends Model_Base_Page {
 	{
 		$page = Model_Page::factory('Page', $page_id);
 		$page->data = @json_encode($blocks, TRUE);
-		// $page->published = FALSE;
-		try
-		{
-			$page->save();
-		}
-		catch (ORM_Validation_Exception $e)
-		{
-			throw new Exception(join(" | \n",$e->errors('')));
-		}
+		$model_created = $page->save_composite();
+		Model_Page::set_actived($model_created);
+	}
+
+	public static function set_actived($model)
+	{
+		DB::update('pages')
+						->set(array('actived' => FALSE))
+						->where('id_page', '=', $model->id_page)
+						->where('id', '!=', $model->id)
+						->execute();
+
+		DB::update('pages')
+						->set(array('actived' => TRUE))
+						->where('id', '=', $model->id)
+						->execute();
+	}
+
+	public static function find_actived_by_id_page($id_page)
+	{
+		return Model_Page::factory('Page', array('id_page' => $id_page, 'actived' => TRUE));
+	}
+
+	public static function find_last_by_id_page($id_page)
+	{
+		$model = Model_Page::factory('Page');
+		$model->where('id_page', '=', $id_page);
+		$model->order_by('id', 'DESC');
+		return $model->find();
+	}
+
+	public function filter_admin()
+	{
+		// $ordened_pages = DB::select('id', 'id_page')->from('pages')->order_by('created_at', 'DESC');
+		// $valid_ids = DB::select('id')->from(array($ordened_pages, 'tmp'))->group_by('id_page')->execute()->as_array(NULL, 'id');
+		// $this->where('id', 'IN', $valid_ids);
+		$this->where('actived', '=', TRUE);
 	}
 
 	public function has_draft($id_page)
 	{
+		$actived = Model_Page::find_actived_by_id_page($id_page);
+
 		$model = Model_Page::factory('Page');
+		$model->where('id', '>', $actived->id);
 		$model->where('id_page', '=', $id_page);
-		$model->where('draft', '=', TRUE);
 		$has_draft = (bool) $model->count_all();
 		return $has_draft;
 	}

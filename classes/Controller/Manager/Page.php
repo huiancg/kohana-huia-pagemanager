@@ -4,7 +4,7 @@ class Controller_Manager_Page extends Controller_Manager_App {
 
 	public $ignore_fields = array(
 		'data',
-		'draft',
+		'actived',
 	);
 
 	public function action_index()
@@ -19,7 +19,7 @@ class Controller_Manager_Page extends Controller_Manager_App {
 		);
 		
 		$this->ignore_fields = array(
-			'draft', 
+			'actived',
 			'introduction', 
 			'slug',
 			'title',
@@ -34,14 +34,17 @@ class Controller_Manager_Page extends Controller_Manager_App {
 
 		$this->ignore_actions[] = 'links';
 
-		// $this->model->where('draft', '=', '0');
-		
-		return parent::action_index();	
+		$this->model->filter_admin();
+
+		$this->model->order_by('id_page');
+
+		parent::action_index();
 	}
 
 	public function action_preview()
 	{
 		$page = Model_Page::factory('Page', $this->request->param('id'));
+		$page = Model_Page::find_last_by_id_page($page->id_page);
 		View::bind_global('page', $page);
 	}
 
