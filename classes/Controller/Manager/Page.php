@@ -34,7 +34,7 @@ class Controller_Manager_Page extends Controller_Manager_App {
 
 		$this->ignore_actions[] = 'links';
 
-		$this->model->filter_admin();
+		$this->model->where('actived', '=', TRUE);
 
 		$this->model->order_by('id_page');
 

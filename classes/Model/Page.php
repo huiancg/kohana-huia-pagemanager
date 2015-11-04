@@ -48,12 +48,11 @@ class Model_Page extends Model_Base_Page {
 		return $model->find();
 	}
 
-	public function filter_admin()
+	public function filter_valid()
 	{
-		// $ordened_pages = DB::select('id', 'id_page')->from('pages')->order_by('created_at', 'DESC');
-		// $valid_ids = DB::select('id')->from(array($ordened_pages, 'tmp'))->group_by('id_page')->execute()->as_array(NULL, 'id');
-		// $this->where('id', 'IN', $valid_ids);
+		$this->where('published', '=', TRUE);
 		$this->where('actived', '=', TRUE);
+		return $this;
 	}
 
 	public function has_draft($id_page)
@@ -112,6 +111,7 @@ class Model_Page extends Model_Base_Page {
 		$model->where('page.slug', '=', $slug);
 		
 		$model->where('page.published', '=', TRUE);
+		$model->where('page.actived', '=', TRUE);
 		$model->order_by('page.updated_at', 'DESC');
 		return $model->find();
 	}

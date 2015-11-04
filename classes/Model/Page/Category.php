@@ -13,20 +13,20 @@ class Model_Page_Category extends Model_Base_Page_Category {
 
 	public function first_page()
 	{
-		return $this->pages->find_by_published(TRUE);
+		return $this->pages->filter_valid()->find();
 	}
 
 	public function pages()
 	{
-		return $this->pages->find_all_by_published(TRUE);
+		return $this->pages->filter_valid()->find_all();
 	}
 
 	public static function products_offered()
 	{
 		$model = Model_Page_Category::factory('Page_Category');
-		$model->where('slug', '!=', '');
-		$model->where('image_icon', '!=', '');
-		
+		$model->where('page_category.slug', '!=', '');
+		$model->where('page_category.image_icon', '!=', '');
+
 		return $model->find_all();
 	}
 
@@ -34,6 +34,7 @@ class Model_Page_Category extends Model_Base_Page_Category {
 	{
 		$model = Model_Page_Category::factory('Page_Category', $id);
 		$pages = $model->pages;
+		$pages->where('actived', '=', TRUE);
 		$pages->where('published', '=', TRUE);
 		$pages->where('name', 'NOT LIKE', '% - Interna');
 		return $pages->find_all();
