@@ -17,8 +17,28 @@ class Model_Page extends Model_Base_Page {
 	{
 		$page = Model_Page::factory('Page', $page_id);
 		$page->data = @json_encode($blocks, TRUE);
+		$page->actived = FALSE;
 		$model_created = $page->save_composite();
-		Model_Page::set_actived($model_created);
+		// Model_Page::set_actived($model_created);
+	}
+
+	public static function set_draft_actived($id_page)
+	{
+		$last = Model_Page::find_last_by_id_page($id_page);
+		
+		Model_Page::set_actived($last);
+
+		return TRUE;
+	}
+
+	public static function clean_draft($id_page)
+	{
+		$current = Model_Page::find_actived_by_id_page($id_page);
+		DB::delete('pages')
+						->where('id_page', '=', $id_page)
+						->where('id', '>', $current)
+						->execute();
+		return TRUE;
 	}
 
 	public static function set_actived($model)

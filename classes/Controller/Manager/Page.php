@@ -48,4 +48,32 @@ class Controller_Manager_Page extends Controller_Manager_App {
 		View::bind_global('page', $page);
 	}
 
+	public function action_save_draft()
+	{
+		$this->template = NULL;
+		
+		$id = $this->request->param('id');
+		
+		if ($this->request->method() !== Request::POST OR ! $id)
+		{
+			return;
+		}
+
+		$this->response->json(Model_Page::set_draft_actived($id));
+	}
+
+	public function action_delete_draft()
+	{
+		$this->template = NULL;
+		
+		$id = $this->request->param('id');
+		
+		if ($this->request->method() !== Request::POST OR ! $id)
+		{
+			return;
+		}
+
+		$this->response->json(Model_Page::clean_draft($id));
+	}
+
 }
