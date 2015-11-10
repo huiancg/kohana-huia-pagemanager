@@ -90,4 +90,20 @@ class Block {
 		return HTML::image($href, $attrs);
 	}
 
+	public function file($data, $name, $default = NULL, $attrs = array())
+	{
+		if ( ! $this->view->preview)
+		{
+			return;
+		}
+		
+		$default_attrs = array(
+			'property' => $name,
+			'property-type' => 'file',
+		);
+		$attrs = Arr::merge($default_attrs, $attrs);
+		$href = $this->get($data, $name, $default);
+		return Form::hidden($name, $href, $attrs);
+	}
+
 }

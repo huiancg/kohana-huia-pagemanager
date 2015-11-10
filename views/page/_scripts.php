@@ -193,10 +193,11 @@ var filter_containers = function(el) {
 	_block_add_form.find('select[name="page_block_template_id"]').replaceWith(select);
 }
 
-var save_page = function() {
+var save_page = function(draft) {
 	var data = {
 		page_id: page_id,
-		blocks: get_blocks()
+		blocks: get_blocks(),
+		draft: (draft === true)
 	};
 	var url = base_url + 'page/save';
 	
@@ -362,6 +363,9 @@ var render_fields = function(properties, name)
 				form += '<img style="max-width: 100px;" src="' + image + '"><br />';
 				form += '<input type="hidden" name="' + field_name + '" value="' + image + '" /><br /><br />';
 				form += '<input type="file" name="' + property['key'] + '" value="' + image + '" /><br /><br />';
+			} else if (property['type'] === 'file') {
+				form += '<input type="hidden" name="' + field_name + '" value="' + $.trim(property['value']) + '" />';
+				form += '<input type="file" name="' + property['key'] + '" value="' + $.trim(property['value']) + '" /><br /><br />';
 			} else if (property['type'] === 'text') {
 				form += '<textarea class="ckeditor" name="' + field_name + '">' + $.trim(property['value']) + '</textarea>';
 			} else if (property['type'] === 'option') {
