@@ -16,20 +16,20 @@
       </div>
     </div>
 
-    <?php if ($page->has_draft($page->id_page)) : ?>
     <div class="btn-group draft-container">
       <div class="btn-group">
-        <button type="button" class="btn btn-warning" id="nav-btn-save" onclick="save_draft(this, <?php echo $page->id_page; ?>, true);">
-          <span class="glyphicon glyphicon-edit"></span> Salvar Rascunho
+        <button type="button" class="btn btn-warning" id="nav-btn-draft-save" onclick="save_draft(this, <?php echo $page->id_page; ?>);">
+          <span class="glyphicon glyphicon-edit"></span> Salvar como Rascunho
         </button>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-danger" id="nav-btn-save" onclick="delete_draft(this, <?php echo $page->id_page; ?>, true);">
-          <span class="glyphicon glyphicon-trash"></span> Descartar Rascunho
-        </button>
-      </div>
+      <?php if ($page->has_draft()) : ?>
+        <div class="btn-group">
+          <button type="button" class="btn btn-danger" id="nav-btn-draft-delete" onclick="delete_draft(this, <?php echo $page->id_page; ?>, true);">
+            <span class="glyphicon glyphicon-trash"></span> Descartar Rascunho
+          </button>
+        </div>
+      <?php endif; ?>
     </div>
-    <?php endif; ?>
 
     <div class="btn-group" role="group">
       <div class="btn-group">
@@ -78,6 +78,8 @@
   var iframe_page = $("#iframe-page");
 
   var nav_btn_save = $('#nav-btn-save');
+  var nav_btn_draft_save = $('#nav-btn-draft-save');
+  var nav_btn_draft_delete = $('#nav-btn-draft-delete');
 
   navbar.after(buttons_navbar);
 
@@ -93,8 +95,10 @@
 
     if (iframe_contents.edited != undefined && iframe_contents.edited) {
       nav_btn_save.removeClass('disabled');
+      nav_btn_draft_save.removeClass('disabled');
     } else {
       nav_btn_save.addClass('disabled');
+      nav_btn_draft_save.addClass('disabled');
     }
   }
 
@@ -108,7 +112,13 @@
     e.preventDefault();
     iframe_contents.save_page().then(function(r) {
       alert('Salvo!');
-      window.location.reload();
+    });
+  });
+
+  nav_btn_draft_save.click(function(e) {
+    e.preventDefault();
+    iframe_contents.save_page(true).then(function(r) {
+      alert('Salvo!');
     });
   });
   

@@ -9,6 +9,11 @@ class Model_Base_Page extends Model_App {
 			'key' => 'PRI',
 			'display' => '11',
 		),
+    'id_page' => array (
+			'data_type' => 'int',
+			'is_nullable' => TRUE,
+			'display' => '11',
+		),
     'page_category_id' => array (
 			'data_type' => 'int',
 			'is_nullable' => TRUE,
@@ -17,6 +22,7 @@ class Model_Base_Page extends Model_App {
 		),
     'name' => array (
 			'data_type' => 'varchar',
+			'is_nullable' => TRUE,
 			'character_maximum_length' => '128',
 		),
     'introduction' => array (
@@ -42,6 +48,11 @@ class Model_Base_Page extends Model_App {
 			'data_type' => 'blob',
 			'is_nullable' => TRUE,
 			'character_maximum_length' => '65535',
+		),
+    'actived' => array (
+			'data_type' => 'tinyint',
+			'is_nullable' => TRUE,
+			'display' => '1',
 		),
     'published' => array (
 			'data_type' => 'tinyint',
@@ -69,12 +80,15 @@ class Model_Base_Page extends Model_App {
   public function rules()
   {
     return array(
+      'id_page' => array(
+        array('numeric'),
+        array('max_length', array(':value', 11)),
+      ),
       'page_category_id' => array(
         array('numeric'),
         array('max_length', array(':value', 11)),
       ),
       'name' => array(
-        array('not_empty'),
         array('max_length', array(':value', 128)),
       ),
       'introduction' => array(
@@ -93,6 +107,10 @@ class Model_Base_Page extends Model_App {
       'data' => array(
         array('max_length', array(':value', 65535)),
       ),
+      'actived' => array(
+        array('numeric'),
+        array('max_length', array(':value', 1)),
+      ),
       'published' => array(
         array('numeric'),
         array('max_length', array(':value', 1)),
@@ -104,6 +122,7 @@ class Model_Base_Page extends Model_App {
   public function labels()
   {
     return array(
+      'id_page' => __('Id_page'),
       'page_category' => __('Page_category'),
       'name' => __('Name'),
       'introduction' => __('Introduction'),
@@ -111,6 +130,7 @@ class Model_Base_Page extends Model_App {
       'title' => __('Title'),
       'meta_description' => __('Meta_description'),
       'data' => __('Data'),
+      'actived' => __('Actived'),
       'published' => __('Published'),
       'page_block_templates' => __('Page_block_templates'),
     );

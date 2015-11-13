@@ -13,12 +13,12 @@ class Model_Page_Category extends Model_Base_Page_Category {
 
 	public function first_page()
 	{
-		return $this->pages->filter_valid()->find();
+		return $this->pages->filter_composite()->find();
 	}
 
 	public function pages()
 	{
-		return $this->pages->filter_valid()->find_all();
+		return $this->pages->filter_composite()->find_all();
 	}
 
 	public static function products_offered()
