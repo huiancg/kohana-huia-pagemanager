@@ -37,6 +37,7 @@ class Model_Page_Category extends Model_Base_Page_Category {
 		$pages->where('actived', '=', TRUE);
 		$pages->where('published', '=', TRUE);
 		$pages->where('name', 'NOT LIKE', '% - Interna');
+		$pages->order_by('id_page');
 		return $pages->find_all();
 	}
 
