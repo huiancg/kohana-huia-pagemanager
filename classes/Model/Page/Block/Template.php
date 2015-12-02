@@ -7,7 +7,10 @@ class Model_Page_Block_Template extends Model_Base_Page_Block_Template {
     if ($page_id)
     {
       $valid_ids = Model_Page_Block_Template::valid_template_ids_by_page($page_id);
-      $this->where('id', 'in', $valid_ids);
+      if ($valid_ids AND ! empty($valid_ids))
+      {
+        $this->where('id', 'in', $valid_ids);
+      }
     }
 
   	return $this->order_by('name', 'ASC')
