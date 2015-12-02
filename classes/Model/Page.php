@@ -19,6 +19,14 @@ class Model_Page extends Model_Base_Page {
 		$page->data = @json_encode($blocks, TRUE);
 		$page->actived = $actived;
 		$model_created = $page->save_composite();
+		
+		if ($actived)
+		{
+			$page->set_composite_actived();
+			$page->clean_draft();
+		}
+
+		return $model_created;
 	}
 
 	public function link_preview()

@@ -18,17 +18,22 @@
 
     <div class="btn-group draft-container">
       <div class="btn-group">
-        <button type="button" class="btn btn-warning" id="nav-btn-draft-save" onclick="save_draft(this, <?php echo $page->id_page; ?>);">
-          <span class="glyphicon glyphicon-edit"></span> Salvar como Rascunho
+        <button type="button" class="btn btn-warning" id="nav-btn-draft-save">
+          <span class="glyphicon glyphicon-edit"></span> Salvar Rascunho
         </button>
-      </div>
       <?php if ($page->has_draft()) : ?>
         <div class="btn-group">
-          <button type="button" class="btn btn-danger" id="nav-btn-draft-delete" onclick="delete_draft(this, <?php echo $page->id_page; ?>, true);">
-            <span class="glyphicon glyphicon-trash"></span> Descartar Rascunho
+          <button type="button" class="btn btn-warning" id="nav-btn-publish">
+            <span class="glyphicon glyphicon-edit"></span> Publicar
+          </button>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-danger" id="nav-btn-draft-delete">
+            <span class="glyphicon glyphicon-trash"></span> Descartar
           </button>
         </div>
       <?php endif; ?>
+      </div>
     </div>
 
     <div class="btn-group" role="group">
@@ -80,6 +85,7 @@
   var nav_btn_save = $('#nav-btn-save');
   var nav_btn_draft_save = $('#nav-btn-draft-save');
   var nav_btn_draft_delete = $('#nav-btn-draft-delete');
+  var nav_btn_draft_publish = $('#nav-btn-publish');
 
   navbar.after(buttons_navbar);
 
@@ -119,6 +125,31 @@
     e.preventDefault();
     iframe_contents.save_page(true).then(function(r) {
       alert('Salvo!');
+    });
+  });
+
+  nav_btn_draft_delete.click(function(e) {
+    e.preventDefault();
+
+    if (confirm('Tem certeza que deseja descartar?')) {
+      $.post('<?php echo $url; ?>/delete_draft/<?php echo $model->id_page ?>').then(function(r) {
+        if (r) {
+          window.location.reload();
+        }
+      }, function() {
+        alert('Erro');
+      });
+    }
+  });
+
+  nav_btn_draft_publish.click(function(e) {
+    e.preventDefault();
+    $.post('<?php echo $url; ?>/save_draft/<?php echo $model->id_page ?>').then(function(r) {
+      if (r) {
+        window.location.reload();
+      }
+    }, function() {
+      alert('Erro');
     });
   });
   

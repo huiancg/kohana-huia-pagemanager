@@ -51,6 +51,7 @@
 CKEDITOR.config.allowedContent = true;
 
 var edited = false;
+var saving = false;
 var set_edited = function(status) {
 	edited = (status !== undefined) ? status : true;
 };
@@ -194,11 +195,19 @@ var filter_containers = function(el) {
 }
 
 var save_page = function(draft) {
+	
+	if (saving) {
+		return;
+	}
+
+	saving = true;
+
 	var data = {
 		page_id: page_id,
 		blocks: get_blocks(),
 		draft: (draft === true)
 	};
+	
 	var url = base_url + 'page/save';
 	
 	function get_preview()
@@ -221,9 +230,9 @@ var save_page = function(draft) {
 	
 	return result.then(function(success, image) {
 			data.image = image;
-			console.info(data);
 			return $.post(url, data).success(function() {
-				set_edited(false);
+				set_edited(false, draft);
+				saving = false;
 			});
 		});
 }
