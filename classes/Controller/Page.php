@@ -73,9 +73,9 @@ class Controller_Page extends Controller_App {
 
       $page_id = $this->request->post('page_id');
       $blocks = $this->request->post('blocks');
-      $draft = (bool) $this->request->post('draft');
+      $actived = $this->request->post('draft') === 'false';
 
-      $result = Model_Page::draft($page_id, $blocks, ! $draft);
+      $result = Model_Page::draft($page_id, $blocks, $actived);
 
       $image = $this->save_image($page_id, $this->request->post('image'));
 

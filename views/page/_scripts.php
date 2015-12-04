@@ -52,7 +52,7 @@ CKEDITOR.config.allowedContent = true;
 
 var edited = false;
 var saving = false;
-var set_edited = function(status) {
+var set_edited = function(status, draft) {
 	edited = (status !== undefined) ? status : true;
 };
 

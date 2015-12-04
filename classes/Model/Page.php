@@ -22,11 +22,11 @@ class Model_Page extends Model_Base_Page {
 		
 		if ($actived)
 		{
-			$page->set_composite_actived();
-			$page->clean_draft();
+			$model_created->set_composite_actived();
+			$model_created->clean_draft();
 		}
 
-		return $model_created;
+		return $model_created->as_array();
 	}
 
 	public function link_preview()

@@ -10,7 +10,7 @@
 
     <div class="btn-group" role="group">
       <div class="btn-group">
-        <button type="button" class="btn btn-success" id="nav-btn-save">
+        <button type="button" class="btn btn-success disabled" id="nav-btn-save">
           <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
         </button>
       </div>
@@ -18,21 +18,14 @@
 
     <div class="btn-group draft-container">
       <div class="btn-group">
-        <button type="button" class="btn btn-warning" id="nav-btn-draft-save">
+        <button type="button" class="btn btn-warning disabled" id="nav-btn-draft-save">
           <span class="glyphicon glyphicon-edit"></span> Salvar Rascunho
         </button>
-      <?php if ($page->has_draft()) : ?>
         <div class="btn-group">
-          <button type="button" class="btn btn-warning" id="nav-btn-publish">
-            <span class="glyphicon glyphicon-edit"></span> Publicar
-          </button>
-        </div>
-        <div class="btn-group">
-          <button type="button" class="btn btn-danger" id="nav-btn-draft-delete">
+          <button type="button" class="btn btn-danger disabled" id="nav-btn-draft-delete">
             <span class="glyphicon glyphicon-trash"></span> Descartar
           </button>
         </div>
-      <?php endif; ?>
       </div>
     </div>
 
@@ -82,6 +75,8 @@
 
   var iframe_page = $("#iframe-page");
 
+  var has_draft = <?php echo ($page->has_draft()) ? 'true' : 'false'; ?>;
+
   var nav_btn_save = $('#nav-btn-save');
   var nav_btn_draft_save = $('#nav-btn-draft-save');
   var nav_btn_draft_delete = $('#nav-btn-draft-delete');
@@ -106,6 +101,12 @@
       nav_btn_save.addClass('disabled');
       nav_btn_draft_save.addClass('disabled');
     }
+    if (has_draft) {
+      nav_btn_save.removeClass('disabled');
+      nav_btn_draft_delete.removeClass('disabled');
+    } else {
+      nav_btn_draft_delete.addClass('disabled');
+    }
   }
 
   $("#iframe-page").load(iframe_page_refresh);
@@ -118,6 +119,7 @@
     e.preventDefault();
     iframe_contents.save_page().then(function(r) {
       alert('Salvo!');
+      has_draft = false;
     });
   });
 
@@ -125,6 +127,7 @@
     e.preventDefault();
     iframe_contents.save_page(true).then(function(r) {
       alert('Salvo!');
+      has_draft = true;
     });
   });
 
