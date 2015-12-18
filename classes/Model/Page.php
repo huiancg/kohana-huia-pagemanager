@@ -13,6 +13,13 @@ class Model_Page extends Model_Base_Page {
 		return Model_Page::$_instance;
 	}
 
+	public function find_all_by_published($published = TRUE)
+	{
+		$this->where('published', '=' , TRUE);
+		$this->where('actived', '=', TRUE);
+		return $this->find_all();
+	}
+
 	public static function draft($page_id, $blocks, $actived = FALSE)
 	{
 		$page = Model_Page::factory('Page', $page_id);
