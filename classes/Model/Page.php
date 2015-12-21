@@ -71,11 +71,22 @@ class Model_Page extends Model_Base_Page {
 			$slug = $exploded[1];
 		}
 
-		$model->where('page.slug', '=', $slug);
+		if (count($exploded) === 1 AND $exploded[0] === '')
+		{
+			$model->where_open();
+			$model->or_where('page.slug', 'IS', NULL);
+			$model->or_where('page.slug', '=', '');
+			$model->where_close();
+		}
+		else
+		{
+			$model->where('page.slug', '=', $slug);
+		}
 		
 		$model->where('page.published', '=', TRUE);
 		$model->where('page.actived', '=', TRUE);
 		$model->order_by('page.updated_at', 'DESC');
+		
 		return $model->find();
 	}
 
