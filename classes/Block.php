@@ -25,7 +25,7 @@ class Block {
 			return;
 		}
 		
-		$pages = Model_Page::factory('Page')->find_all_by_published(TRUE)->as_array('id', 'name');
+		$pages = Model_Page::factory('Page')->published()->find_all()->as_array('id_page', 'name');
 		return $this->option($data, $name, $pages);
 	}
 

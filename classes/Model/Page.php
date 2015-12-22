@@ -29,6 +29,14 @@ class Model_Page extends Model_Base_Page {
 		return $model_created->as_array();
 	}
 
+	public function published()
+	{
+		$this->where('published', '=' , TRUE);
+		$this->where('actived', '=', TRUE);
+		$this->order_by('page.name');
+		return $this;
+	}
+
 	public function link_preview()
 	{
 		if ( ! $this->loaded())
