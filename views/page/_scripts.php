@@ -189,7 +189,7 @@ var filter_containers = function(el) {
 	var template_id = current_block.data('page-block-template-id');
 	var first_level = ! template_id;
 
-	_.each(options, (option) => {
+	_.each(options, function(option) {
 		option = $(option);
 		
 		var containers = option.data('containers');
