@@ -42,6 +42,28 @@
 	._block:hover > ._block_toolbar {
 		display: block;
 	}
+        
+        .wando-modal label {
+            display: block;
+            margin-bottom: .5rem;
+            font-weight: 600;
+        }
+        
+        .wando-modal input[type=text], 
+        .wando-modal input[type=email], 
+        .wando-modal input[type=number], 
+        .wando-modal select, 
+        .wando-modal textarea {
+            color: #666;
+            font: 16px;
+            font-size: 13px;
+            height: 30px;
+            margin-bottom: 1.25rem;
+            padding: 6px 10px;
+            background-color: #fff;
+            border: 1px solid #d7dcde;
+            width: 100%;
+        }
 </style>
 
 <script>
@@ -189,7 +211,7 @@ var filter_containers = function(el) {
 	var template_id = current_block.data('page-block-template-id');
 	var first_level = ! template_id;
 
-	_.each(options, (option) => {
+	_.each(options, function(option) {
 		option = $(option);
 		
 		var containers = option.data('containers');
@@ -441,7 +463,7 @@ var fieldset_index = function(fieldset)
 var fieldset_reset = function(fieldset)
 {
 	// clean inputs
-	fieldset.find('input[type="text",type="hidden"],textarea').val('');
+	fieldset.find('input[type="text"],input[type="hidden"],textarea').val('');
 
 	// bind file upload event
 	fieldset.find('input[type="file"]').fileupload(options_file_upload);
@@ -453,7 +475,7 @@ var fieldset_reset = function(fieldset)
 
 var modal_render = function(block)
 {
-	var wando_modal = $('<div title="Editar"></div>');
+	var wando_modal = $('<div title="Editar" class="wando-modal"></div>');
 
 	var properties = parse_properties(block);
 
