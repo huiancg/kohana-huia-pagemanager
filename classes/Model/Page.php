@@ -15,7 +15,7 @@ class Model_Page extends Model_Base_Page {
 
 	public function find_all_by_published($published = TRUE)
 	{
-		$this->where('published', '=' , TRUE);
+		$this->where('published', '=' , $published);
 		$this->where('actived', '=', TRUE);
 		return $this->find_all();
 	}
