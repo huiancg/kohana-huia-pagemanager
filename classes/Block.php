@@ -61,7 +61,7 @@ class Block {
 		return Form::select($name, $options, $this->get($data, $name, $default), $attrs);
 	}
 
-	public function select($data, $name, $options, $default = NULL, $attrs = array())
+	public function select($data, $name, $default = NULL, $attrs = array())
 	{
 		if ( ! $this->view->preview)
 		{
@@ -73,13 +73,21 @@ class Block {
 		);
 		$attrs = Arr::merge($default_attrs, $attrs);
 
+		$option_selected = [
+			0 => 'No',
+			1 => 'Yes',
+		];
+
 		$html = '<div ' . HTML::attributes($attrs) . '>';
 
-		foreach ($options as $index => $option)
+		$options = Arr::get($data, $name);
+
+		foreach ($options as $option)
 		{
 			$html .= '<div property="' . $name . '" property-type="repeat">';
-			$html .= '<span property="text">' . Arr::path($data, $index . '.text', 'Item') . '</span>';
-			$html .= '<span property="value">' . Arr::path($data, $index . '.value', '1') . '</span>';
+				$html .= '<span property="text">' . Arr::get($options, 'text', 'Item') . '</span>';
+				$html .= '<span property="value">' . Arr::get($options, 'value', '1') . '</span>';
+				$html .= $this->option($options, 'selected', $option_selected);
 			$html .= '</div>';
 		}
 
