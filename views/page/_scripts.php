@@ -62,6 +62,28 @@ $(window).bind('beforeunload', function(e) {
 	}
 });
 
+var options_file_upload = {
+	dataType: 'json', 
+	url: base_url+'page_block/upload',
+	imageMaxWidth: 800,
+	imageMaxHeight: 800,
+	imageCrop: true,
+	acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+	done: function (e, data) {
+		var that = $(this);
+		var image = data.response().result[that.attr('name')][0];
+		var src = image.url;
+		var thumb = image.thumbnailUrl;
+		var img = that.prevAll('img:first');
+		var hidden = that.prevAll('input[type="hidden"]:first');
+		hidden.val('public/upload/' + image.name);
+		img.replaceWith('<img src="' + thumb + '"><br />');
+		that.data('change-value', true);
+		that.data('value', image.name);
+		window.that = that;
+	}
+}
+
 var page_id = parseInt($('#_block_add_form').data('page-id'));
 
 var _block_add = $('section.section > ._block_add');
@@ -421,6 +443,9 @@ var fieldset_reset = function(fieldset)
 	// clean inputs
 	fieldset.find('input[type="text",type="hidden"],textarea').val('');
 
+	// bind file upload event
+	fieldset.find('input[type="file"]').fileupload(options_file_upload);
+
 	fieldset.find('.cke_reset').remove();
 	fieldset_index(fieldset.parent());
 	return fieldset;
@@ -544,27 +569,7 @@ var modal_render = function(block)
 	});
 
 	// Upload
-	$('input[type="file"]', wando_modal).fileupload({
-		dataType: 'json', 
-		url: base_url+'page_block/upload',
-		imageMaxWidth: 800,
-    imageMaxHeight: 800,
-    imageCrop: true,
-    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-		done: function (e, data) {
-			var that = $(this);
-			var image = data.response().result[that.attr('name')][0];
-      var src = image.url;
-      var thumb = image.thumbnailUrl;
-      var img = that.prevAll('img:first');
-      var hidden = that.prevAll('input[type="hidden"]:first');
-			hidden.val('public/upload/' + image.name);
-			img.replaceWith('<img src="' + thumb + '"><br />');
-			that.data('change-value', true);
-			that.data('value', image.name);
-			window.that = that;
-  	}
-  })
+	$('input[type="file"]', wando_modal).fileupload(options_file_upload);
 }
 
 var bind_block = function(block) {
