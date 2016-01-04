@@ -25,7 +25,7 @@ class Block {
 			return;
 		}
 		
-		$pages = Model_Page::factory('Page')->find_all_by_published(TRUE)->as_array('id', 'name');
+		$pages = Model_Page::factory('Page')->published()->find_all()->as_array('id_page', 'name');
 		return $this->option($data, $name, $pages);
 	}
 
@@ -74,7 +74,7 @@ class Block {
 		$name_link_internal = $name . '_link_internal';
 		$title = ($force) ? $default : $this->get($data, $name, $default);
 		$href = $this->get($data, $name_link);
-		$href = ($href) ? $href : Model_Page::factory('Page', $this->get($data, $name_link_internal))->link();
+		$href = ($href) ? $href : Model_Page::factory('Page')->published()->where('id_page', '=', $this->get($data, $name_link_internal))->find()->link();
 
 		return HTML::anchor($href, $title, $attrs) . $this->hidden($data, $name_link) . $this->pages($data, $name_link_internal);
 	}

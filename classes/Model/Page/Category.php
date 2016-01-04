@@ -27,6 +27,13 @@ class Model_Page_Category extends Model_Base_Page_Category {
 		$model->where('page_category.slug', '!=', '');
 		$model->where('page_category.image_icon', '!=', '');
 
+		$model->join(array('pages', 'page'));
+		$model->on('page.page_category_id', '=', 'page_category.id');
+		$model->where('page.actived', '=', TRUE);
+		$model->where('page.published', '=', TRUE);
+
+		$model->group_by('page_category.id');
+
 		return $model->find_all();
 	}
 
