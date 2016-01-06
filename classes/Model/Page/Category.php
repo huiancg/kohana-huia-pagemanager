@@ -13,7 +13,7 @@ class Model_Page_Category extends Model_Base_Page_Category {
 
 	public function first_page()
 	{
-		return $this->pages->filter_composite()->find();
+		return $this->pages->published()->find();
 	}
 
 	public function pages()
