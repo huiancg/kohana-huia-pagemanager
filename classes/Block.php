@@ -61,6 +61,41 @@ class Block {
 		return Form::select($name, $options, $this->get($data, $name, $default), $attrs);
 	}
 
+	public function select($data, $name, $default = NULL, $attrs = array())
+	{
+		if ( ! $this->view->preview)
+		{
+			return;
+		}
+
+		$default_attrs = array(
+			'style' => 'display:none',
+		);
+		$attrs = Arr::merge($default_attrs, $attrs);
+
+		$option_selected = [
+			0 => 'No',
+			1 => 'Yes',
+		];
+
+		$html = '<div ' . HTML::attributes($attrs) . '>';
+
+		$options = Arr::get($data, $name);
+
+		foreach ($options as $option)
+		{
+			$html .= '<div property="' . $name . '" property-type="repeat">';
+				$html .= '<span property="text">' . Arr::get($options, 'text', 'Item') . '</span>';
+				$html .= '<span property="value">' . Arr::get($options, 'value', '1') . '</span>';
+				$html .= $this->option($options, 'selected', $option_selected);
+			$html .= '</div>';
+		}
+
+		$html .= '</div>';
+
+		return $html;
+	}
+
 	public function a($data, $name, $default = NULL, $attrs = array(), $force = FALSE)
 	{
 		$default_attrs = array(
