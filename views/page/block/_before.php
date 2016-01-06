@@ -1,6 +1,6 @@
 <?php
 if ($preview) :
-$uid = '_block_' .uniqid();
+$uid = '_block_' .md5(uniqid(Debug::vars($_block), TRUE));
 ?>
 <div id="<?php echo $uid; ?>" class="_block" 
 		data-page-block-template-id="<?php echo $_block->page_block_template_id; ?>">
