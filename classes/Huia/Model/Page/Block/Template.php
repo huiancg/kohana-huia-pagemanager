@@ -62,6 +62,13 @@ class Huia_Model_Page_Block_Template extends Model_Base_Page_Block_Template {
   public static function view($page_block_template_id, $data = array())
   {
   	$view = Model_Page_Block_Template::factory('Page_Block_Template', $page_block_template_id)->view;
+    
+    $file = Kohana::find_file('views/page/block', $view);
+    if ( ! $file)
+    {
+      return NULL;
+    }
+
   	return View::factory('page/block/' . $view, $data);
   }
 

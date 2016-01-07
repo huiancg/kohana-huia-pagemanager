@@ -165,6 +165,11 @@ class Huia_Model_Page extends Model_Base_Page {
 		$view = Model_Page_Block_Template::view($block->page_block_template_id, $data);
 		$before = View::factory('page/block/_before', $data);
 
+		if ( ! $view)
+		{
+			return View::factory('page/block/_not_found', ['name' => $block_name])->render();
+		}
+
 		// helpers
 		$view->helper = Block::factory($block, $block_name, $view);
 		
