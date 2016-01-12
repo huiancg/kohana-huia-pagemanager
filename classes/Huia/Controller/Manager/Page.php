@@ -53,7 +53,6 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
     $is_new = $this->request->action() === 'new';
     if ($is_new)
     {
-      $this->model->id_page = $this->model->id;
       $this->model->actived = TRUE;
     }
   }

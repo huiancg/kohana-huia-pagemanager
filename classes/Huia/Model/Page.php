@@ -25,7 +25,7 @@ class Huia_Model_Page extends Model_Base_Page {
 		$page = Model_Page::factory('Page', $page_id);
 		$page->data = @json_encode($blocks, TRUE);
 		$page->actived = $actived;
-		$model_created = $page->save_composite();
+		$model_created = $page->save();
 		
 		if ($actived)
 		{
@@ -179,6 +179,18 @@ class Huia_Model_Page extends Model_Base_Page {
 		}
 
 		return $before->render() . $view->render() . $after->render();
+	}
+
+	/**
+	 * Create the record depending on primary
+	 *
+	 * @chainable
+	 * @param  Validation $validation Validation object
+	 * @return \ORM
+	 */
+	public function save(Validation $validation = NULL)
+	{
+		return $this->save_composite($validation);
 	}
 
 }
