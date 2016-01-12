@@ -1,9 +1,9 @@
 {
-  "name": "huiancg/kohana-huia-pagemanager",
+  "name": "huia/kohana-huia-pagemanager",
   "type": "kohana-module",
   "require": {
-    "huiancg/kohana-huia": "~2.3",
-    "huiancg/kohana-huia-manager": "~1.0",
+    "huia/kohana-huia": "~2.3",
+    "huia/kohana-huia-manager": "~1.0",
     "composer/installers": "~1.0",
     "kohana/core": ">=3.3",
     "php": ">=5.3.3"
