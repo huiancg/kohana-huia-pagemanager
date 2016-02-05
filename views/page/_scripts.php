@@ -108,7 +108,9 @@ var options_file_upload = {
 
 var page_id = parseInt($('#_block_add_form').data('page-id'));
 
-var _block_add = $('section.section > ._block_add');
+if ( ! window._block_add) {
+	var _block_add = $('section.section > ._block_add');
+}
 
 var _block_add_form = $('#_block_add_form').dialog({
 	autoOpen: false,
