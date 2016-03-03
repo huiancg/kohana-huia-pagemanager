@@ -20,10 +20,28 @@ class Huia_Controller_Page extends Controller_App {
       {
         if ( ! Can::show())
         {
-          exit();
+          throw new Kohana_Exception("Permission Denied.");
         }
+        
         $this->preview = TRUE;
-        $this->page = Model_Page::factory('Page', $this->request->param('id'));
+        
+        if ($this->request->query('preview') !== NULL)
+        {
+          $this->preview = (bool) $this->request->query('preview');
+        }
+        
+        if ($this->request->query('id_page') !== NULL)
+        {
+          $id_page = (bool) $this->request->query('id_page');
+          $this->page = Model_Page::factory('Page')->where('id_page', '=', $id_page)->order_by('id', 'DESC')->find();
+          dd($this->page);
+        }
+        else
+        {
+          $page_id = (int) $this->request->param('id');
+          $this->page = Model_Page::factory('Page', $page_id);
+        }
+
       }
 
       View::bind_global('page', $this->page);

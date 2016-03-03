@@ -3,15 +3,15 @@
   <div class="container-fluid">
 
     <ol class="breadcrumb">
-      <li><a href="<?php echo URL::site('manager'); ?>">Manager</a></li>
-      <li><a href="<?php echo URL::site('manager/page'); ?>">Páginas</a></li>
+      <li><a href="<?php echo URL::site('manager'); ?>"><?php echo __("Manager"); ?></a></li>
+      <li><a href="<?php echo URL::site('manager/page'); ?>"><?php echo __("Pages"); ?></a></li>
       <li><?php echo $page->name; ?></li>
     </ol>
 
     <div class="btn-group" role="group">
       <div class="btn-group">
         <button type="button" class="btn btn-success disabled" id="nav-btn-save">
-          <span class="glyphicon glyphicon-floppy-disk"></span> Salvar
+          <span class="glyphicon glyphicon-floppy-disk"></span> <?php echo __("Save"); ?>
         </button>
       </div>
     </div>
@@ -19,11 +19,11 @@
     <div class="btn-group draft-container">
       <div class="btn-group">
         <button type="button" class="btn btn-warning disabled" id="nav-btn-draft-save">
-          <span class="glyphicon glyphicon-edit"></span> Salvar Rascunho
+          <span class="glyphicon glyphicon-edit"></span> <?php echo __("Save Draft"); ?>
         </button>
         <div class="btn-group">
           <button type="button" class="btn btn-danger disabled" id="nav-btn-draft-delete">
-            <span class="glyphicon glyphicon-trash"></span> Descartar
+            <span class="glyphicon glyphicon-trash"></span> <?php echo __("Discard"); ?>
           </button>
         </div>
       </div>
@@ -32,7 +32,7 @@
     <div class="btn-group" role="group">
       <div class="btn-group">
         <button type="button" class="btn btn-default" id="nav-btn-add-block">
-          <span class="glyphicon glyphicon-plus"></span> Bloco
+          <span class="glyphicon glyphicon-plus"></span> <?php echo __("Block"); ?>
         </button>
       </div>
     </div>
@@ -40,11 +40,12 @@
     <div class="btn-group" role="group">
       <div class="btn-group">
         <button type="button" class="disabled btn btn-default nav-btn-resolution" data-rotate="true">
-          <span class="glyphicon glyphicon-repeat"></span> Rotate
+          <span class="glyphicon glyphicon-repeat"></span> <?php echo __("Rotate"); ?>
         </button>
-        <button type="button" class="btn btn-default nav-btn-resolution is_desktop active">Desktop</button>
-        <button type="button" class="btn btn-default nav-btn-resolution" data-width="1024" data-height="768">Tablet</button>
-        <button type="button" class="btn btn-default nav-btn-resolution" data-width="320" data-height="568">Mobile</button>
+        <button type="button" class="btn btn-default nav-btn-resolution is_desktop active"><?php echo __("Desktop"); ?></button>
+        <button type="button" class="btn btn-default nav-btn-resolution" data-width="1024" data-height="768"><?php echo __("Tablet"); ?></button>
+        <button type="button" class="btn btn-default nav-btn-resolution" data-width="320" data-height="568"><?php echo __("Mobile"); ?></button>
+        <a href="<?php echo $page->link_preview(); ?>?preview=0" target="_blank" type="button" class="btn btn-default nav-btn-preview"><?php echo __("External"); ?> <i class="glyphicon glyphicon-new-window"></i></a>
       </div>
     </div>
     
@@ -81,6 +82,7 @@
   var nav_btn_draft_save = $('#nav-btn-draft-save');
   var nav_btn_draft_delete = $('#nav-btn-draft-delete');
   var nav_btn_draft_publish = $('#nav-btn-publish');
+  var nav_btn_preview = $('.nav-btn-preview');
 
   navbar.after(buttons_navbar);
 
