@@ -442,7 +442,7 @@ var fieldset_index = function(fieldset)
 	fieldsets.each(function(index, el) {
 		el = $(el);
 		el.attr('data-index', index);
-		el.find('input[type="text"],input[type="hidden"],textarea.ckeditor').each(function() {
+		el.find('input[type="text"],input[type="hidden"],select,textarea.ckeditor').each(function() {
 			var input = $(this);
 			var name = input.attr('name').replace(regex, group + '[' + index + ']');
 			input.attr('name', name);
