@@ -550,6 +550,7 @@ var modal_render = function(block)
 		if (prev) {
 			prev.before(group);
 		}
+		fieldset_index(group.parent());
 	});
 
 	wando_modal.find('.btn-down').button({
@@ -566,6 +567,7 @@ var modal_render = function(block)
 		if (next) {
 			next.after(group);
 		}
+		fieldset_index(group.parent());
 	});
 
 	wando_modal.find('.btn-add').button();
