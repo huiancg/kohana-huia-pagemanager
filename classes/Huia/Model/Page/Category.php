@@ -18,7 +18,7 @@ class Huia_Model_Page_Category extends Model_Base_Page_Category {
 
 	public function pages()
 	{
-		return $this->pages->filter_composite()->order_by("id_page")->find_all();
+		return $this->pages->order_by("id")->find_all();
 	}
 
 	public static function products_offered()
@@ -29,7 +29,6 @@ class Huia_Model_Page_Category extends Model_Base_Page_Category {
 
 		$model->join(array('pages', 'page'));
 		$model->on('page.page_category_id', '=', 'page_category.id');
-		$model->where('page.actived', '=', TRUE);
 		$model->where('page.published', '=', TRUE);
 
 		$model->group_by('page_category.id');
@@ -41,10 +40,9 @@ class Huia_Model_Page_Category extends Model_Base_Page_Category {
 	{
 		$model = Model_Page_Category::factory('Page_Category', $id);
 		$pages = $model->pages;
-		$pages->where('actived', '=', TRUE);
 		$pages->where('published', '=', TRUE);
 		$pages->where('name', 'NOT LIKE', '% - Interna');
-		$pages->order_by('id_page');
+		$pages->order_by('id');
 		return $pages->find_all();
 	}
 

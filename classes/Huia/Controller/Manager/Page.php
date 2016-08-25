@@ -4,7 +4,6 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
 
   public $ignore_fields = array(
     'data',
-    'actived',
   );
 
   public function action_index()
@@ -19,8 +18,6 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
     );
     
     $this->ignore_fields = array(
-      'actived',
-      'introduction', 
       'slug',
       'title',
       'data',
@@ -34,9 +31,7 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
 
     $this->ignore_actions[] = 'links';
 
-    $this->model->where('actived', '=', TRUE);
-
-    $this->model->order_by('id_page');
+    $this->model->order_by('id');
 
     parent::action_index();
   }
@@ -44,17 +39,7 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
   public function action_preview()
   {
     $page = Model_Page::factory('Page', $this->request->param('id'));
-    $page = $page->find_last_composite();
     View::bind_global('page', $page);
-  }
-
-  protected function save_before()
-  {
-    $is_new = $this->request->action() === 'new';
-    if ($is_new)
-    {
-      $this->model->actived = TRUE;
-    }
   }
 
 }

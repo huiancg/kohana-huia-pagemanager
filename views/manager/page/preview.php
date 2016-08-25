@@ -16,19 +16,6 @@
       </div>
     </div>
 
-    <div class="btn-group draft-container">
-      <div class="btn-group">
-        <button type="button" class="btn btn-warning disabled" id="nav-btn-draft-save">
-          <span class="glyphicon glyphicon-edit"></span> <?php echo __("Save Draft"); ?>
-        </button>
-        <div class="btn-group">
-          <button type="button" class="btn btn-danger disabled" id="nav-btn-draft-delete">
-            <span class="glyphicon glyphicon-trash"></span> <?php echo __("Discard"); ?>
-          </button>
-        </div>
-      </div>
-    </div>
-
     <div class="btn-group" role="group">
       <div class="btn-group">
         <button type="button" class="btn btn-default" id="nav-btn-add-block">
@@ -76,12 +63,7 @@
 
   var iframe_page = $("#iframe-page");
 
-  var has_draft = <?php echo ($page->has_draft()) ? 'true' : 'false'; ?>;
-
   var nav_btn_save = $('#nav-btn-save');
-  var nav_btn_draft_save = $('#nav-btn-draft-save');
-  var nav_btn_draft_delete = $('#nav-btn-draft-delete');
-  var nav_btn_draft_publish = $('#nav-btn-publish');
   var nav_btn_preview = $('.nav-btn-preview');
 
   navbar.after(buttons_navbar);
@@ -98,16 +80,8 @@
 
     if (iframe_contents.edited != undefined && iframe_contents.edited) {
       nav_btn_save.removeClass('disabled');
-      nav_btn_draft_save.removeClass('disabled');
     } else {
       nav_btn_save.addClass('disabled');
-      nav_btn_draft_save.addClass('disabled');
-    }
-    if (has_draft) {
-      nav_btn_save.removeClass('disabled');
-      nav_btn_draft_delete.removeClass('disabled');
-    } else {
-      nav_btn_draft_delete.addClass('disabled');
     }
   }
 
@@ -121,43 +95,9 @@
     e.preventDefault();
     iframe_contents.save_page().then(function(r) {
       alert('Salvo!');
-      has_draft = false;
     });
   });
 
-  nav_btn_draft_save.click(function(e) {
-    e.preventDefault();
-    iframe_contents.save_page(true).then(function(r) {
-      alert('Salvo!');
-      has_draft = true;
-    });
-  });
-
-  nav_btn_draft_delete.click(function(e) {
-    e.preventDefault();
-
-    if (confirm('Tem certeza que deseja descartar?')) {
-      $.post('<?php echo $url; ?>/delete_draft/<?php echo $model->id_page ?>').then(function(r) {
-        if (r) {
-          window.location.reload();
-        }
-      }, function() {
-        alert('Erro');
-      });
-    }
-  });
-
-  nav_btn_draft_publish.click(function(e) {
-    e.preventDefault();
-    $.post('<?php echo $url; ?>/save_draft/<?php echo $model->id_page ?>').then(function(r) {
-      if (r) {
-        window.location.reload();
-      }
-    }, function() {
-      alert('Erro');
-    });
-  });
-  
   $('#nav-btn-add-block').click(function(e) {
     e.preventDefault();
     iframe_contents._block_add_form.dialog('open');

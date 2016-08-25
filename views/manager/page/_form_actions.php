@@ -10,17 +10,6 @@
 		<span class="glyphicon glyphicon-<?php echo Arr::get($data, 'icon', 'edit'); ?>"></span> <?php echo Arr::get($data, 'text', ''); ?>
 	</a>
   <?php endforeach; ?>
-
-  <?php if (isset($id_page) AND $_row->has_draft()) : ?>
-  <div class="draft-container pull-right" style="margin-left: 3px">
-		<span class="btn btn-draft btn-sm btn-success" onclick="save_draft(this, <?php echo $id_page; ?>);">
-			<span class="glyphicon glyphicon-edit"></span> Salvar Rascunho
-		</span>
-		<span class="btn btn-draft btn-sm btn-danger" onclick="delete_draft(this, <?php echo $id_page; ?>);">
-			<span class="glyphicon glyphicon-trash"></span> Descartar Rascunho
-		</span>
-	</div>
-	<?php endif; ?>
 	
 	<a class="btn btn-sm btn-primary" href="<?php echo $url; ?>/edit/<?php echo $id ?>">
 		<span class="glyphicon glyphicon-edit"></span> Editar

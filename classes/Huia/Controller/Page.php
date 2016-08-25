@@ -30,18 +30,8 @@ class Huia_Controller_Page extends Controller_App {
           $this->preview = (bool) $this->request->query('preview');
         }
         
-        if ($this->request->query('id_page') !== NULL)
-        {
-          $id_page = (bool) $this->request->query('id_page');
-          $this->page = Model_Page::factory('Page')->where('id_page', '=', $id_page)->order_by('id', 'DESC')->find();
-          dd($this->page);
-        }
-        else
-        {
-          $page_id = (int) $this->request->param('id');
-          $this->page = Model_Page::factory('Page', $page_id);
-        }
-
+        $page_id = (int) $this->request->param('id');
+        $this->page = Model_Page::factory('Page', $page_id);
       }
 
       View::bind_global('page', $this->page);
@@ -74,11 +64,11 @@ class Huia_Controller_Page extends Controller_App {
       return $output_file; 
 	}
 
-	public function save_image($page_id, $image)
+	public function save_image($id, $image)
 	{
       $dir = DOCROOT.'public'.DIRECTORY_SEPARATOR.'upload'.DIRECTORY_SEPARATOR.'page_preview'.DIRECTORY_SEPARATOR;
       create_dir($dir);
-      $file = $dir . $page_id . '.jpg';
+      $file = $dir . $id . '.jpg';
       $this->base64_to_jpeg($image, $file);
 	}
 
@@ -89,15 +79,16 @@ class Huia_Controller_Page extends Controller_App {
         exit();
       }
 
-      $page_id = $this->request->post('page_id');
+      $page_id = (int) $this->request->post('page_id');
       $blocks = $this->request->post('blocks');
-      $actived = $this->request->post('draft') === 'false';
 
-      $result = Model_Page::draft($page_id, $blocks, $actived);
+      $page = Model_Page::factory('Page', $page_id);
+      $page->data = @json_encode($blocks);
+      $page->save();
 
       $image = $this->save_image($page_id, $this->request->post('image'));
 
-      $this->response->json($result);
+      $this->response->json($page->as_array());
 	}
 
 }

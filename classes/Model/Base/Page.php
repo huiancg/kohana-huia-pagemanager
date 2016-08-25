@@ -9,11 +9,6 @@ class Model_Base_Page extends Model_App {
 			'key' => 'PRI',
 			'display' => '11',
 		),
-    'id_page' => array (
-			'data_type' => 'int',
-			'is_nullable' => TRUE,
-			'display' => '11',
-		),
     'page_category_id' => array (
 			'data_type' => 'int',
 			'is_nullable' => TRUE,
@@ -21,11 +16,6 @@ class Model_Base_Page extends Model_App {
 			'display' => '11',
 		),
     'name' => array (
-			'data_type' => 'varchar',
-			'is_nullable' => TRUE,
-			'character_maximum_length' => '128',
-		),
-    'introduction' => array (
 			'data_type' => 'varchar',
 			'is_nullable' => TRUE,
 			'character_maximum_length' => '128',
@@ -49,11 +39,6 @@ class Model_Base_Page extends Model_App {
 			'is_nullable' => TRUE,
 			'character_maximum_length' => '65535',
 		),
-    'actived' => array (
-			'data_type' => 'tinyint',
-			'is_nullable' => TRUE,
-			'display' => '1',
-		),
     'published' => array (
 			'data_type' => 'tinyint',
 			'is_nullable' => TRUE,
@@ -70,7 +55,6 @@ class Model_Base_Page extends Model_App {
 
   protected $_has_many = array(
     'links' => array('model' => 'Link'),
-    'page_block_templates' => array('model' => 'Page_Block_Template', 'through' => 'page_block_templates_pages'),
   );
 
   protected $_belongs_to = array(
@@ -80,10 +64,6 @@ class Model_Base_Page extends Model_App {
   public function rules()
   {
     return array(
-      'id_page' => array(
-        array('numeric'),
-        array('max_length', array(':value', 11)),
-      ),
       'page_category_id' => array(
         array('numeric'),
         array('max_length', array(':value', 11)),
@@ -107,10 +87,6 @@ class Model_Base_Page extends Model_App {
       'data' => array(
         array('max_length', array(':value', 65535)),
       ),
-      'actived' => array(
-        array('numeric'),
-        array('max_length', array(':value', 1)),
-      ),
       'published' => array(
         array('numeric'),
         array('max_length', array(':value', 1)),
@@ -122,17 +98,13 @@ class Model_Base_Page extends Model_App {
   public function labels()
   {
     return array(
-      'id_page' => __('Id_page'),
       'page_category' => __('Page_category'),
       'name' => __('Name'),
-      'introduction' => __('Introduction'),
       'slug' => __('Slug'),
       'title' => __('Title'),
       'meta_description' => __('Meta_description'),
       'data' => __('Data'),
-      'actived' => __('Actived'),
       'published' => __('Published'),
-      'page_block_templates' => __('Page_block_templates'),
     );
   }
 

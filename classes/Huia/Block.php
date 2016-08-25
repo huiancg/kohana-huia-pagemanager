@@ -25,7 +25,7 @@ class Huia_Block {
 			return;
 		}
 		
-		$pages = Model_Page::factory('Page')->published()->find_all()->as_array('id_page', 'name');
+		$pages = Model_Page::factory('Page')->published()->find_all()->as_array('id', 'name');
 		return $this->option($data, $name, $pages);
 	}
 
@@ -109,7 +109,7 @@ class Huia_Block {
 		$name_link_internal = $name . '_link_internal';
 		$title = ($force) ? $default : $this->get($data, $name, $default);
 		$href = $this->get($data, $name_link);
-		$href = ($href) ? $href : Model_Page::factory('Page')->published()->where('id_page', '=', $this->get($data, $name_link_internal))->find()->link();
+		$href = ($href) ? $href : Model_Page::factory('Page')->published()->where('id', '=', $this->get($data, $name_link_internal))->find()->link();
 
 		return HTML::anchor($href, $title, $attrs) . $this->hidden($data, $name_link) . $this->pages($data, $name_link_internal);
 	}

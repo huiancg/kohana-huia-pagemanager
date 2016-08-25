@@ -74,7 +74,7 @@ CKEDITOR.config.allowedContent = true;
 
 var edited = false;
 var saving = false;
-var set_edited = function(status, draft) {
+var set_edited = function(status) {
 	edited = (status !== undefined) ? status : true;
 };
 
@@ -204,7 +204,7 @@ $(document).on('click', '._block_add a', function(e) {
 	_block_add_form.dialog('open');
 });
 
-var save_page = function(draft) {
+var save_page = function() {
 	
 	if (saving) {
 		return;
@@ -214,8 +214,7 @@ var save_page = function(draft) {
 
 	var data = {
 		page_id: page_id,
-		blocks: get_blocks(),
-		draft: (draft === true)
+		blocks: get_blocks()
 	};
 	
 	var url = base_url + 'page/save';
@@ -241,7 +240,7 @@ var save_page = function(draft) {
 	return result.then(function(success, image) {
 			data.image = image;
 			return $.post(url, data).success(function() {
-				set_edited(false, draft);
+				set_edited(false);
 				saving = false;
 			});
 		});

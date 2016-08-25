@@ -16,30 +16,12 @@ class Huia_Model_Page extends Model_Base_Page {
 	public function find_all_by_published($published = TRUE)
 	{
 		$this->where('published', '=' , $published);
-		$this->where('actived', '=', TRUE);
 		return $this->find_all();
-	}
-
-	public static function draft($page_id, $blocks, $actived = FALSE)
-	{
-		$page = Model_Page::factory('Page', $page_id);
-		$page->data = @json_encode($blocks, TRUE);
-		$page->actived = $actived;
-		$model_created = $page->save();
-		
-		if ($actived)
-		{
-			$model_created->set_composite_actived();
-			$model_created->clean_draft();
-		}
-
-		return $model_created->as_array();
 	}
 
 	public function published()
 	{
 		$this->where('published', '=' , TRUE);
-		$this->where('actived', '=', TRUE);
 		$this->order_by('page.name');
 		return $this;
 	}
@@ -99,7 +81,6 @@ class Huia_Model_Page extends Model_Base_Page {
 		}
 		
 		$model->where('page.published', '=', TRUE);
-		$model->where('page.actived', '=', TRUE);
 		$model->order_by('page.updated_at', 'DESC');
 		
 		return $model->find();
@@ -179,18 +160,6 @@ class Huia_Model_Page extends Model_Base_Page {
 		}
 
 		return $before->render() . $view->render() . $after->render();
-	}
-
-	/**
-	 * Create the record depending on primary
-	 *
-	 * @chainable
-	 * @param  Validation $validation Validation object
-	 * @return \ORM
-	 */
-	public function save(Validation $validation = NULL)
-	{
-		return $this->save_composite($validation);
 	}
 
 }
