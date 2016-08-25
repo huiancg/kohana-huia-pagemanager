@@ -162,7 +162,7 @@ class Huia_Model_Page extends Model_Base_Page {
 		$data['_data'] = $block->data;
 		
 		$after = View::factory('page/block/_after', $data);
-		$view = Model_Page_Block_Template::view($block->page_block_template_id, $data);
+		$view = Page_Module::view($block->page_block_template_id, $data);
 		$before = View::factory('page/block/_before', $data);
 
 		if ( ! $view)

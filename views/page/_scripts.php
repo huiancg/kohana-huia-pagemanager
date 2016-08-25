@@ -201,44 +201,8 @@ $(document).on('click', '._block_add a', function(e) {
 	e.preventDefault();
 	var that = $(this);
 	_block_add = that.closest('._block_add');
-	filter_containers(that);
 	_block_add_form.dialog('open');
 });
-
-var filter_containers = function(el) {
-	var select = _block_add_select.clone();
-	var options = select.find('option');
-	
-	var current_block = el.closest('._block');
-	var template_id = current_block.data('page-block-template-id');
-	var first_level = ! template_id;
-
-	_.each(options, function(option) {
-		option = $(option);
-		
-		var containers = option.data('containers');
-
-		var has_containers = containers.length;
-
-		var valid_containers = _.find(containers, function(i) {
-			return i == template_id;
-		});
-
-		var invalid;
-		
-		if (first_level) {
-			invalid = has_containers;
-		} else if (has_containers) {
-			invalid =  ! valid_containers;
-		}
-
-		if (invalid) {
-			option.remove();
-		}
-	});
-
-	_block_add_form.find('select[name="page_block_template_id"]').replaceWith(select);
-}
 
 var save_page = function(draft) {
 	
