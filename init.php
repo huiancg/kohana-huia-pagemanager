@@ -1,5 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
+/*
 Route::set('pagemanager', '<catcher>', array('catcher' => '(?!^(huia|api|manager)).*'))
 	->filter(function($route, $params, $request) {
 		try
@@ -15,3 +16,5 @@ Route::set('pagemanager', '<catcher>', array('catcher' => '(?!^(huia|api|manager
 		'controller'  => 'page',
 		'action'      => 'index',
 	));
+*/
+Model_Page::init_routes();

@@ -6,6 +6,12 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
     'data',
   );
 
+  public function before()
+  {
+    View::set_global('object_options', $this->object_options());
+    parent::before();
+  }
+
   public function action_index()
   {
     $this->actions = array(
@@ -21,7 +27,10 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
       'slug',
       'title',
       'data',
+      'object',
+      'route',
       'meta_description',
+      'keywords',
     );
 
     if ($this->parent_id AND $this->parent === 'page')
@@ -34,6 +43,16 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
     $this->model->order_by('id');
 
     parent::action_index();
+  }
+
+  public function object_options()
+  {
+    $models = ORM::get_models();
+    $models = array_filter($models, function($model_name) {
+      return $model_name !== 'Page';
+    });
+    $models += [''];
+    return json_encode(array_map('strtolower', $models), TRUE);
   }
 
   public function action_preview()

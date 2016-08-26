@@ -2,15 +2,64 @@
 
 class Huia_Model_Page extends Model_Base_Page {
 
-	public static $_instance = NULL;
-
-	public static function instance()
+	public static function init_routes()
 	{
-		if (Model_Page::$_instance === NULL)
+		if (self::$_all_routes === NULL)
+    {
+      self::$_all_routes = Cache::instance()->get('routes');
+    }
+
+    $migration = ((Kohana::$environment === Kohana::DEVELOPMENT) AND Arr::get($_GET, 'models'));
+
+    if ((Kohana::$caching === FALSE OR ! self::$_all_routes) AND ! $migration)
+    {
+    	$pages = self::factory('Page')->find_all();
+    	foreach ($pages as $page)
+    	{
+    		$model_name = NULL;
+    		
+    		if ($page->object)
+    		{
+	    		$model_name = self::get_model_name($page->object);		
+  	  		$model = self::factory($model_name);
+	    		self::$_all_routes[$page->object] = $model::get_routes();
+  	  	}
+  	  	else
+  	  	{
+	    		self::$_all_routes[$page->route] = $page->route;
+  	  	}
+
+    		self::register_route($model_name, $page->object, $page->route, $page->catcher());
+    	}
+      Cache::instance()->set('routes', self::$_all_routes);
+    }
+
+    return self::$_all_routes;
+	}
+
+	public function catcher()
+	{
+		return 'catcher_'.$this->id;
+	}
+
+	public static function register_route($model_name, $object, $route, $catcher)
+	{
+		$route = Route::set($object, $route, Model_App::all_routes());
+
+		if ( ! $model_name)
 		{
-			Model_Page::$_instance = new Model_Page();	
+			$object = $route;
 		}
-		return Model_Page::$_instance;
+		else
+		{
+			$route->filter('Model_'.$model_name.'::route_filter');
+		}
+
+		$route->defaults([
+				'controller' => 'page',
+				'action'     => 'index',
+				'catcher'    => $catcher,
+			]);
 	}
 
 	public function find_all_by_published($published = TRUE)
@@ -36,6 +85,7 @@ class Huia_Model_Page extends Model_Base_Page {
 		return URL::site('page/preview/' . $this->id);
 	}
 
+	/*
 	public function link()
 	{
 		if ( ! $this->loaded())
@@ -47,43 +97,11 @@ class Huia_Model_Page extends Model_Base_Page {
 
 		return URL::site($prepend . $this->slug);
 	}
-
-	public static function slug_exists($slug)
-	{
-		return Model_Page::find_by_slug($slug)->loaded();
-	}
+	*/
 
 	public static function find_by_slug($slug)
 	{
-		// @TODO Aumentar quantidade de níveis
-		$exploded = explode('/', $slug, 2);
-
-		$model = Model_Page::factory('Page');
-
-		if (count($exploded) === 2)
-		{
-			$model->join('page_categories');
-			$model->on('page_categories.id', '=', 'page.page_category_id');
-			$model->where('page_categories.slug', '=', $exploded[0]);
-			$slug = $exploded[1];
-		}
-
-		if (count($exploded) === 1 AND $exploded[0] === '')
-		{
-			$model->where_open();
-			$model->or_where('page.slug', 'IS', NULL);
-			$model->or_where('page.slug', '=', '');
-			$model->where_close();
-		}
-		else
-		{
-			$model->where('page.slug', '=', $slug);
-		}
-		
-		$model->where('page.published', '=', TRUE);
-		$model->order_by('page.updated_at', 'DESC');
-		
-		return $model->find();
+		return self::factory('Page', (int) substr($slug, 8));
 	}
 
 	public function blocks($blocks = array(), $name = NULL, $add_block = TRUE)

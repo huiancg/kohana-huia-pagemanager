@@ -35,6 +35,7 @@ class Huia_Controller_Page extends Controller_App {
       }
 
       View::bind_global('page', $this->page);
+
       $this->content = $this->page->render_blocks();
 	}
 
