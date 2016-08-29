@@ -21,8 +21,24 @@ class Huia_Model_Page extends Model_Base_Page {
     		if ($page->object)
     		{
 	    		$model_name = self::get_model_name($page->object);		
-  	  		$model = self::factory($model_name);
-	    		self::$_all_routes[$page->object] = $model::get_routes();
+  	  		
+  	  		if  (class_exists('Model_'.$model_name))
+  	  		{
+	  	  		$model = self::factory($model_name);
+  	  		}
+  	  		else
+  	  		{
+	  	  		continue;
+	  	  	}
+
+	  	  	try
+	  	  	{
+		    		self::$_all_routes[$page->object] = $model::get_routes();
+		    	}
+		    	catch (Database_Exception $e)
+		    	{
+		    		continue;
+		    	}
   	  	}
   	  	else
   	  	{
@@ -101,7 +117,10 @@ class Huia_Model_Page extends Model_Base_Page {
 
 	public static function find_by_slug($slug)
 	{
-		return self::factory('Page', (int) substr($slug, 8));
+		return self::factory('Page')
+									->where('id', '=', (int) substr($slug, 8))
+									->published()
+									->find();
 	}
 
 	public function blocks($blocks = array(), $name = NULL, $add_block = TRUE)

@@ -14,6 +14,11 @@ class Model_Base_Page extends Model_App {
       'is_nullable' => TRUE,
       'character_maximum_length' => '128',
     ),
+    'object' => array (
+      'data_type' => 'varchar',
+      'is_nullable' => TRUE,
+      'character_maximum_length' => '128',
+    ),
     'route' => array (
       'data_type' => 'varchar',
       'is_nullable' => TRUE,
@@ -58,6 +63,9 @@ class Model_Base_Page extends Model_App {
       'name' => array(
         array('max_length', array(':value', 128)),
       ),
+      'object' => array(
+        array('max_length', array(':value', 128)),
+      ),
       'route' => array(
         array('max_length', array(':value', 256)),
       ),
@@ -86,6 +94,7 @@ class Model_Base_Page extends Model_App {
   {
     return array(
       'name' => __('Name'),
+      'object' => __('Object'),
       'route' => __('Route'),
       'title' => __('Title'),
       'meta_description' => __('Meta_description'),

@@ -17,4 +17,7 @@ Route::set('pagemanager', '<catcher>', array('catcher' => '(?!^(huia|api|manager
 		'action'      => 'index',
 	));
 */
-Model_Page::init_routes();
+if (ORM_Autogen::db_exists())
+{
+	Model_Page::init_routes();
+}
