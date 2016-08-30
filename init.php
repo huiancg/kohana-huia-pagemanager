@@ -30,7 +30,7 @@ Route::set('manager_childs', 'manager/<parents>/<controller>(/<action>(/<id>))',
     'directory' => 'manager'
   ));
 
-if (ORM_Autogen::db_exists())
+if (ORM_Autogen::db_exists() AND ORM_Autogen::table_exists('pages'))
 {
 	Model_Page::init_routes();
 }
