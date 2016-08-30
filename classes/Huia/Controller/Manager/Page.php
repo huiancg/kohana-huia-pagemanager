@@ -6,6 +6,8 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
     'data',
   );
 
+  public $can_export = FALSE;
+
   public function before()
   {
     View::set_global('object_options', $this->object_options());
