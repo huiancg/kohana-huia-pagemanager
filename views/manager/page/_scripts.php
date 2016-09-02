@@ -7,8 +7,7 @@
 	var $route_label = $('label[for="route"]').closest('div');
 	var object_id = $object.val();
 
-	var has_options = ((options.length === 0) || (options[0] !== ''));
-
+	var has_options = ((Object.keys(options).length > 1));
 
 	if (has_options) {
 

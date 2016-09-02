@@ -53,7 +53,7 @@ class Huia_Controller_Manager_Page extends Controller_Manager_App {
     $models = array_filter($models, function($model_name) {
       return $model_name !== 'Page';
     });
-    $models += [''];
+    $models = [''] + $models;
     return json_encode(array_map('strtolower', $models), TRUE);
   }
 

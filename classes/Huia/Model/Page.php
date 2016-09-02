@@ -108,20 +108,6 @@ class Huia_Model_Page extends Model_Base_Page {
     return URL::site('page/preview/' . $this->id);
   }
 
-  /*
-  public function link()
-  {
-    if ( ! $this->loaded())
-    {
-      return '';
-    }
-
-    $prepend = ($this->page_category_id) ? $this->page_category->slug . '/' : '';
-
-    return URL::site($prepend . $this->slug);
-  }
-  */
-
   public static function find_by_slug($slug)
   {
     return self::factory('Page')
@@ -204,6 +190,38 @@ class Huia_Model_Page extends Model_Base_Page {
     }
 
     return $before->render() . $view->render() . $after->render();
+  }
+
+  /**
+   * Handles getting of column
+   * Override this method to add custom get behavior
+   *
+   * @param   string $column Column name
+   * @throws Kohana_Exception
+   * @return mixed
+   */
+  public function get($column)
+  {
+    $result = parent::get($column);
+    if (Request::current() AND Request::current()->directory() !== 'Manager' AND parent::get('object'))
+    {
+      $result = $this->replace_patters(parent::get('object'), $result);
+    }
+    return $result;
+  }
+
+  protected function replace_patters($object, $string)
+  {
+    $model = ORM::factory(self::get_model_name($object))->initial();
+    
+    $keys = [];
+    $values = [];
+    foreach ($model->as_array() as $key => $value)
+    {
+      $keys[] = '<'.$model->object_name().'.'.$key.'>';
+      $values[] = $value;
+    }
+    return str_replace($keys, $values, $string);
   }
 
 }
