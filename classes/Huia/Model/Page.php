@@ -213,6 +213,11 @@ class Huia_Model_Page extends Model_Base_Page {
   protected function replace_patters($object, $string)
   {
     $model = ORM::factory(self::get_model_name($object))->initial();
+
+    if ( ! $model)
+    {
+      return $string;
+    }
     
     $keys = [];
     $values = [];
