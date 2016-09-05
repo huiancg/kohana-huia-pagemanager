@@ -9,5 +9,5 @@ if ($preview) {
 }
 ?>
 <form class="<?php echo Arr::get($_data, 'type'); ?>">
-	<?php echo Model_Page::instance()->blocks(Arr::get($_data, 'form'), 'form'); ?>
+	<?php echo Model_Page::factory('Page')->blocks(Arr::get($_data, 'form'), 'form'); ?>
 </form>

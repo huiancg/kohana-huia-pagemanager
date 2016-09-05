@@ -46,5 +46,5 @@ $attributes['style'] = join(";", $styles);
 		<img src="<?php echo $src; ?>" style="display:none" property="background" property-type="image">
 	<?php endif; ?>
 
-	<?php echo Model_Page::instance()->blocks(Arr::get($_data, 'container'), 'container'); ?>
+	<?php echo Model_Page::factory('Page')->blocks(Arr::get($_data, 'container'), 'container'); ?>
 </div>

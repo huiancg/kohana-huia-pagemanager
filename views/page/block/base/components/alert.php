@@ -10,5 +10,5 @@ if ($preview) {
 }
 ?>
 <div class="alert alert-<?php echo Arr::get($_data, 'type', 'success'); ?>" role="alert">
-	<?php echo Model_Page::instance()->blocks(Arr::get($_data, 'content'), 'content'); ?>
+	<?php echo Model_Page::factory('Page')->blocks(Arr::get($_data, 'content'), 'content'); ?>
 </div>

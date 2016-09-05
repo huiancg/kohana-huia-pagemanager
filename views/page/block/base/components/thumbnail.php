@@ -3,7 +3,7 @@
   
   <?php if ($preview or Arr::get($_data, 'caption')) : ?>
   <div class="caption">
-  	<?php echo Model_Page::instance()->blocks(Arr::get($_data, 'caption'), 'caption'); ?>
+  	<?php echo Model_Page::factory('Page')->blocks(Arr::get($_data, 'caption'), 'caption'); ?>
   </div>
 	<?php endif; ?>
 </div>

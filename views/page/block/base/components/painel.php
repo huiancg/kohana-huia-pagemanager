@@ -18,7 +18,7 @@ if ($preview) {
     </h3>
   </div>
   <div class="panel-body">
-    <?php echo Model_Page::instance()->blocks(Arr::get($_data, 'body'), 'body'); ?>
+    <?php echo Model_Page::factory('Page')->blocks(Arr::get($_data, 'body'), 'body'); ?>
   </div>
 
 </div>
