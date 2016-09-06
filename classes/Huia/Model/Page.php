@@ -108,6 +108,27 @@ class Huia_Model_Page extends Model_Base_Page {
     return URL::site('page/preview/' . $this->id);
   }
 
+  public function filter_sitemap()
+  {
+    $this->where('object', 'IS', NULL);
+  }
+
+  public function slug()
+  {
+    $slug = parent::slug();
+    
+    if ( ! $this->route AND  ! $this->object)
+    {
+      return '';
+    }
+    else if ($this->route)
+    {
+      return $this->route;
+    }
+
+    return $slug;
+  }
+
   public static function find_by_slug($slug)
   {
     return self::factory('Page')
